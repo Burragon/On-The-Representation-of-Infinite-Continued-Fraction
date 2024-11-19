@@ -1,0 +1,1643 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{upquote}
+\usepackage{amssymb}
+\usepackage{sectsty}
+
+\DeclareMathOperator\comperrorfunc{erfc}
+
+\DeclareMathOperator\errorfunc{erf}
+
+\title{On The Representation of Infinite Continued Fractions}
+\author{Andre Bhattacharyya}
+\date{5-30-24}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\section{Table of Contents}
+
+$${}$$
+
+Table of Contents (2)
+
+$${}$$
+
+Introduction (3)
+
+$${}$$
+
+Constants to their Continued Fractions (6)
+
+$${}$$
+
+Properties of Continued Fractions and their Equalities (9)
+
+$${}$$
+
+Standard Representations of Continued Fractions (10)
+
+$${}$$
+
+Types of Continued Fractions (10)
+
+$${}$$
+
+Bessel Functions with Continued Fractions (13)
+
+$${}$$
+
+Error Functions with Continued Fractions (14)
+
+$${}$$
+
+Hypergeometric Function with Continued Fractions (15)
+
+$${}$$
+
+Continued Fraction Computational Algorithms (18)
+
+$${}$$
+
+Continued Fractions from Continued Fractions (20)
+
+$${}$$
+
+Further Generalization of Continued Fractions (23)
+
+$${}$$
+
+The Extravaganza of Modifying Continued Fractions (27)
+
+$${}$$
+
+Interesting Continued Fraction Equalities to Functions (36)
+
+$${}$$
+
+Functions to Apply Transformations on Arguments of Infinite Continued Fractions (40)
+
+$${}$$
+
+Properties of Functions Involving Inputs in Infinite Continued Fraction Arguments (42)
+
+$${}$$
+
+Applications of Infinite Continued Fractions Outside of Number Theory (46)
+
+$${}$$
+
+The Mysterious $\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } $ (47)
+
+$${}$$
+
+Conclusion (51)
+
+$${}$$
+
+Notation and Terminology Glossary (52)
+
+$${}$$
+
+Table of Important Values (53)
+
+$${}$$
+
+Resources (53)
+
+\section{Introduction}
+
+Greetings. The generalized form of a continued fraction (Gauss Kettenbruch notation) goes as follows:
+
+$$ \kappa_{n=x}^{y} \frac{a_n}{b_n} $$
+
+or
+
+$$ \underset{n=x}{\overset{y}{ \mathrm K}} \frac{a_n}{b_n}$$
+
+which is equivalent to
+
+$$ \frac{a_x}{b_x + \frac{a_{x+1}}{b_{x+1} + \frac{a_{x+2}}{... b_{y-1} + \frac{a_y}{b_y}}}} $$
+
+Where in the notation, $n$ is the index, $y$ is the upper bound, the numerator of the fraction is the partial numerator argument ($a_n$), and the denominator is the partial denominator argument ($b_n$). Kettenbruch notation may even be written with a fancier $\mathcal{K}$. Finding the values of continued fractions with finite upper and lower bounds for its index is simple because it is simply a rational number (for partial numerators and denominators are also rational) that can be calculated via basic division laws. For example: 
+
+$$ \underset{n=1}{\overset{3}{ \mathrm K}} \frac{2}{1/3} = \frac{2}{1/3 + \frac{2}{1/3 + \frac{2}{1/3}}} $$
+
+$$= \frac{2}{1/3 + \frac{2}{1/3 + 6}} = \frac{2}{1/3 + \frac{2}{19/3}} $$
+
+$$= \frac{2}{1/3 + 6/19} = \frac{2}{37/57} = 114/37 $$
+
+or
+
+$$\frac{114}{37}$$
+
+This may seem quite calculable for all inputs, that is until the upper bound of the notation is infinite. However, if the partial numerator is one and denominator is any arbitrary constant x, the continued fraction is satisfied by this classic formula:
+
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{x} = \frac{2}{\sqrt{x^2 +4} + x}$$
+
+Many interesting values can be generated from fractions like these such as the golden ratio - 1 (where $x = 1$). However, more complex values such as $\pi$ and $e$ can emerge when the partial numerators and denominators are inconstant and the index is not only 1. here are a few examples:
+
+$$ \pi = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{(2n-1)^2}{6} $$
+
+$$ e = 1 + \frac{1}{\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{n}} $$
+
+$$ \ln{2} = \frac{1}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n^2}{1}} $$
+
+As you can see, many fundamental and transcendental values all mathematicians hold dear can be described via infinite continued fractions that often follow basic rules. However, how do we solve continued fractions such as:
+
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{n} $$
+or
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{\sqrt{n}}{n} $$
+or even something as terrible as
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } $$
+
+
+unfortunately, for the last one it is likely impossible to reduce it beyond this:
+
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{Fibonacci(n)}{Fibonacci(n+1)}},$$  
+
+where $Fibonacci(x)$ is the $x$th Fibonacci number (which I will later denote as $Fib(x)$). However, Wolfram Alpha computes the continued fraction above to be approximately 0.5466. Once we try simplifying continued fractions like the ones seen above, we need to acknowledge a few functions such as Bessel, hypergeometric, and error functions; all of which are seen throughout continued fractions like these. For instance:
+
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{n} = \frac{I_1(2)}{I_0(2)},$$
+
+where $I_x(y)$ is the modified Bessel function of the first kind. This continued fraction above is known as the continued fraction constant and its value is approximately 0.6978. Many Bessel functions are connected to each other as shown:
+
+$$I_n(x)=e^\frac{-i n \pi}{2} J_n(ix)$$
+
+where $J_n(x)$ is another type of Bessel function (Bessel function of first kind). This function has an interesting equality:
+
+$$J_n(x)=\frac{\frac{1}{\Gamma(n+1)}*\frac{x}{2}^{2n}}{1+\frac{x^2}{B(0)+ \underset{q=1}{\overset{\infty}{ \mathrm K}} \frac{A(q)}{B(q)}}}$$
+
+Where
+
+$$ A(a) = 4a^2 + 4na - x^2$$
+
+$$ B(b) = 4b^2 + 8b + 4nb + 4 + 4n - x^2$$
+
+Please note that there are much simpler formulas to describe the Bessel function of first kind, this formula however shows a connection between it and continued fractions. Another cool continued fraction formula is the Euler continued fraction formula.
+
+$$ \underset{n=1}{ \overset{\infty}{\sum}} (\underset{r=1}{ \overset{n}{\prod}} a_r) = \frac{a_0}{1+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{-a_n}{1+a_n}}$$
+
+This formula is quite remarkable like perhaps all of the formulae shown. These formulas can be used to simplify many infinite continued fractions. However, I don’t believe there is a simplified formula for the general (perhaps infinite) continued fraction:
+
+$$ \underset{n=x}{\overset{y}{ \mathrm K}} \frac{a_n}{b_n} = \frac{a_x}{b_x + \frac{a_{x+1}}{b_{x+1} + \frac{a_{x+2}}{... b_{y-1} + \frac{a_y}{b_y}}}}  $$
+
+Thus, with this information we shall begin a path throughout the numerous domains of the orthodox yet unorthodox concept of continued fractions.
+
+\section{Constants to their Continued Fractions}
+
+Suppose there is a constant x that we want to turn into a continued fraction. This can be done quite easily with rationals and integers.
+Acknowledge this as the standard continued fraction form:
+
+$$ b_0 + \frac{a_1}{b_1 + \frac{a_{2}}{b_{2} + \frac{a_{3}}{... b_{y-1} + \frac{a_y}{b_y}}}} $$
+
+When turning integers and rationals into their continued fractions, this is the form used. Although, integers don’t have regular continued fraction forms so they can be ignored. Let’s see how a rational can be turned into a continued fraction.
+
+$$ \frac{8}{3}=2+\frac{2}{3}=2+\frac{1}{\frac{3}{2}}=2+\frac{1}{1+\frac{1}{2}} $$
+
+We can turn this fraction into linear standard continued fraction form because its partial numerators are all 1.
+
+$$ \frac{8}{3} = [2;1,2] $$
+
+Where
+
+$$ [b_0;b_1,b_2,\cdots,b_x] = b_0 +  \frac{1}{b_1 + \frac{1}{b_2 + \frac{1}{\cdots b_{x-1} + \frac{1}{b_x}}}} = b_0 +  \underset{n=1}{\overset{x}{ \mathrm K}} \frac{1}{b_n} $$ 
+
+Irrational values can be a little more difficult to get a continued fraction for. For irrational values tend to have infinite continued fractions that follow strange patterns. Here is a law that can simplify specific types of irrationals:
+
+$$x^{0.5} =  \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{x-1}{2}, |arg(x)| < \pi $$
+
+This formula can be used to find the infinite continued fraction of the sqrt of any value (where $|arg(x)| < \pi$). You can exponentiate the continued fraction to find:
+
+$$ x^{y/2} = (\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{x-1}{2})^y, |arg(x)| < \pi$$
+
+However, through actual computation, it appears:
+
+$$ (x^{0.5}-1)^{y} = (\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{x-1}{2})^y, |arg(x)| < \pi$$
+
+So perhaps my previous equalities for $x^{0.5}$ and $x^{y/2}$ in this section may have been slightly inaccurate. Some may consider this identity and the one below great ways to simplify some infinite continued fractions:
+
+$$ {}_2F_1(a, b; c; z) = \frac{1}{1 +}\, \frac{a b z}{c +}\, \frac{(c-a) (c-b) z}{c+1 +}\, \frac{(a+1) (b+1) z}{c+2 +}\, \frac{(c-a-1) (c-b-1) z}{c+3 +} \, \cdots $$
+
+Where function $F$ is the hypergeometric function. The notation above can also be used to describe infinite continued fractions. However, throughout this document I hope one thing is clear: Gauss Kettenbruch K notation is superior to any standard notation that denotes a general continued fraction. However, we may encounter new notations we may use for more abstract continued fractions throughout this document. Perhaps it is only inefficient if the partial numerators or denominators follow no algebraic pattern; thus they must be represented by a sequence that may be of some inconvenience. Therefore, this is the formula above using Gauss Kettenbruch K notation:
+
+$$ {}_2F_1(a, b; c; z) = ?$$
+
+The problem is that deriving or finding a formula for this in Gauss Kettenbruch notation is quite difficult. When there are continued fraction formulas for these hypergeometric functions, they tend to be quite complicated with some domain restrictions. For instance, we can find on WolframAlpha the identity:
+
+$$_2 F_1 (1,b;c;z) = \frac{c-1}{c-1-zb+ \underset{k=1}{\overset{\infty}{\mathrm K}} \frac{k(b+k-1)z(1-z)}{c+k-1-z(b+2k)}},|arg(1-z)|<\pi,Re(z)<\frac{1}{2}$$
+
+Thus, this is a scenario where just a non-compressed continued fraction would probably suffice unless it manages to satisfy all of the function’s demands. Now here is an interesting question, how was this identity below discovered?
+
+$$ e = 2 +  \frac{1}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{n+1}} $$
+
+By a simple approximation of e we can find that e follows this pattern by putting it in linear continued fraction form (by setting all partial numerators to 1).
+
+$$ e = [2;1,2,1,1,4,1,1,6,1,1,8,1,1,10 \cdots] $$
+
+As one can probably tell, this follows a pattern after the beginning of it. When the standard form of a CF follows an easy pattern like this, it can often be replaced by Gauss Kettenbruch K notation. One of the many formulas that satisfy this pattern is the following:
+
+$$ e = 2 +  \frac{1}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{n+1}} $$
+
+Plenty of other formulae can also have this same pattern.
+
+$$ e = 2 +  \frac{1}{\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{n}} $$
+
+$$ e = 1 +  \frac{1}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{-n}{n+2}} $$
+
+These formulas are powerful; for these formulas do not only solve for constants, but they can be used to solve continued fractions. Recall:
+
+$$ e = 2 +  \frac{1}{\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{n}} $$
+
+By subtracting 2 on both sides and taking the reciprocal on both sides, we get:
+
+$$ \frac{1}{e-2} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{n} $$
+
+This is how many identities that involve Gauss Kettenbruch notation are discovered. For instance:
+
+$$\frac{1}{\phi-1} =  \frac{1}{\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1}} $$
+
+Where $\phi$ is the golden ratio. Thus:
+
+$$\phi-1 =  \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1}  $$
+
+Of course, the idea of people deriving the reciprocal of the golden ratio before the golden ratio is unlikely, but:
+
+ $$1/\phi = \phi - 1 $$
+
+We shall get into the natural properties of the golden ratio in the next section. But what was desired in this section was to show some basic methods to find the continued fractions for constants, and perhaps using such formulae to find the equalities to continued fractions.
+
+\section{Properties of Continued Fractions and their Equalities}
+
+As mentioned previously, you can find the continued fractions for about all values; including complex values. However, basic continued fractions tend to be equivalent to fundamental constants. The simplest infinite continued fraction of all is perhaps one of the greatest constants of all.
+
+$$\phi = 1+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1} $$
+
+Where $\phi$ denotes the golden ratio as described earlier. The golden ratio has so many various properties that it must be one of the most important constants in all of mathematics. Here are some of its amazing properties:
+
+$$\phi^{n} = \phi^{n+1} - \phi^{n-1} $$
+
+$$\underset{n->\infty}{lim} \frac{Fibonacci(n)}{Fibonacci(n-1)}= \phi$$
+
+And of course:
+
+$$\phi = 1+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1} $$
+
+The Fibonacci numbers and the golden ratio are quite connected to each other. I showed previously:
+
+$$ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{Fibonacci(n)}{Fibonacci(n+1)}},$$
+
+And this is only true because
+
+$$\underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} = \frac{Fibonacci(n)}{Fibonacci(n+1)} $$
+
+
+And that is why
+
+$$\phi - 1 = \underset{k=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1} = \underset{n->\infty}{lim} \frac{Fibonacci(n)}{Fibonacci(n+1)}$$
+
+
+Although the golden ratio is a common value to see in many basic infinite continued fractions, there are plenty of other constants that are seen in various basic infinite continued fractions. A few are $e$, $\pi$, and the continued fraction constant. As described previously, infinite continued fractions often equal Bessel functions. Here is something interesting about the inputs of the Bessel $I$ function.
+
+$$\frac{I_1(2)}{I_0(2)} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{n} $$
+
+$$\frac{I_1(1)}{I_0(1)} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{2n} $$
+
+$$\frac{I_1(4)}{I_0(4)} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{0.5n} $$
+
+After some more inputs and proofs, one can conclude this intriguing formula:
+
+$$\frac{I_1(a)}{I_0(a)} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{2n}{a}} $$
+
+Where $a$ is a positive real number.
+It truly is all of these identities that enable us to make interesting continued fractions for all values.
+
+\section{Standard Representations of Continued Fractions}
+
+Although there are numerous nonstandard representations of continued fractions I will show throughout this document, it would be wise to show the standard way to represent continued fractions. Most of these standard representations of continued fractions can be found at \url{https://en.m.wikipedia.org/wiki/Continued_fraction}. Through the representations on the Wikipedia page, you will find:
+
+$$\frac{a_1}{b_1+\frac{a_2}{b_2+\frac{a_3}{b_3+\cdots}}}$$
+$$=\frac{a_1}{b_1+}\frac{a_2}{b_2+}\frac{a_3}{b_3+\cdots}$$
+$$=\frac{a_1|}{|b_1} + \frac{a_2|}{|b_2} + \frac{a_3|}{|b_3} + \cdots$$
+$$=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}$$
+
+In my opinion, the final equality/notation for that infinite continued fraction is superior to the rest. The two notations prior to our ContinuedFractionK notation may be confusing and, like the first CF, have an infinitely long notation without an ellipsis. Of course, the fraction after the ContinuedFractionK notation may be confusing because some may assume the fraction is the argument of the notation, not the numerator and denominator. However, the ContinuedFractionK notation provides a perfectly precise and describable continued fraction for a given CF. For an ellipsis may not describe the next term, and not having an exact formula for $n$th partial numerator or denominator may cause confusion and inaccuracy for computation. Thus, we will eventually use even more general notations to truly delve into the realm of continued fractions and beyond.
+
+\section{Types of Continued Fractions}
+
+There are many types of continued fractions. They can be finite or infinite, convergent or divergent, simple lists or complex partial numerators and denominators, or possibly branched. Finite continued fractions are the most basic kind of continued fraction; for finite continued fractions have finite terms. Thus they are always able to be simplified unless they are undefined or are already algebraically simplified. As shown earlier:
+
+$$ \underset{n=1}{\overset{3}{ \mathrm K}} \frac{2}{1/3} = \frac{2}{1/3 + \frac{2}{1/3 + \frac{2}{1/3}}} $$
+
+$$= \frac{2}{1/3 + \frac{2}{1/3 + 6}} = \frac{2}{1/3 + \frac{2}{19/3}} $$
+
+$$= \frac{2}{1/3 + 6/19} = \frac{2}{37/57} = 114/37 $$
+
+or
+
+$$\frac{114}{37}$$
+
+This simplification in the beginning of this paper was a finite continued fraction; however, an infinite continued fraction is a continued fraction with an upper bound of infinity (in kettenbruch notation) or in other words; a continued fraction that is endless. These tend to converge to irrational values such as the golden ratio or $e$.
+
+$$\phi - 1 = \underset{k=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1}$$
+
+Where $\phi$ is the golden ratio.
+
+Convergent continued fractions converge to a specific value. Divergent continued fractions however are undefined, divergent towards infinity, or diverge between some values, thus not having any real or complex value.
+Here is an example of a divergent continued fraction:
+
+$$\underset{k=1}{\overset{\infty}{ \mathrm K}} \frac{1}{k^{-2} }$$
+
+The Stern-Stolz Divergence Theorem describes how if the sum of all partial denominators of an infinite continued fraction converges to a finite value, the infinite continued fraction most likely diverges. Because:
+
+$$\underset{k=1}{\overset{\infty}{ \sum}} {k^{-2} }$$
+
+Converges to $ \pi^2 / 6$, the divergent continued fraction stated earlier is obviously divergent. Simple infinite continued fractions are often consider infinite continued fractions where their partial numerators are all 1 and the partial denominators are integers. These continued fractions can be written in the list form described earlier. Continued fractions that are not simple are often considered generalized continued fractions. Although, perhaps a more complex concept in the realm of continued fractions is a branched continued fraction. These kinds of continued fractions often relate to and or are seen in papers involving the hypergeometric function. Now I will introduce a new notation:
+
+$$\underset{k=1}{\overset{\infty}{ \mathrm D}} \frac{a_k}{b_k} = \frac{a_1}{b_1+\frac{a_2}{b_2+\frac{a_3}{b_3+\cdots}}}$$
+
+This new notation may seem like simple kettenbruch notation, and it is in simple cases. However, this notation has a quirk not seen in regular Gauss K Kettenbruch notation. In an article titled “Approximation for the Ratios of the Confluent Hypergeometric Function $\phi_D^N$ by the Branched Continued Fraction”, the formula below is used to compute multivariable hypergeometric functions:
+
+$$ d_0(z) + \underset{k=1}{\overset{\infty}{ \mathrm D}} \underset{i_k=1}{\overset{N}{ \sum}} \frac{c_{i(k)} (z)}{d_{i(k)} (z)} = d_0(z)  +\underset{i_1=1}{\overset{N}{ \sum}} \frac{c_{i(1)} (z)}{d_{i(1)} (z) + \underset{i_2=1}{\overset{N}{ \sum}} \frac{c_{i(2)} (z)}{d_{i(2)} (z) + \underset{i_3=1}{\overset{N}{ \sum}} \frac{c_{i(3)} (z)}{d_{i(3)} (z) + \cdots}}} $$
+
+
+Of course, I have not described what the hypergeometric function is, so I shall quickly do that before I get into branched continued fractions. The ordinary (Gaussian) hypergeometric is defined below:
+
+$$ {}_2 F_1 (a,b;c;z) = \underset{n=0}{\overset{\infty}{\sum}} \frac{(a)_n (b)_n}{(c)_n}\frac{z^n}{n!}$$
+
+Where $(x)_n$ is the rising Pochhammer symbol (also known as the rising factorial) which is defined below:
+
+$$ (x)_n = \underset{k=1}{\overset{n}{\prod}} (x-k+1)$$
+
+Thus via substitution, we get the following equality for the ordinary hypergeometric function:
+
+$$ {}_2 F_1 (a,b;c;z) = \underset{n=0}{\overset{\infty}{\sum}} \frac{(\underset{k=1}{\overset{n}{\prod}} (a-k+1)) (\underset{k=1}{\overset{n}{\prod}} (b-k+1))}{\underset{k=1}{\overset{n}{\prod}} (c-k+1)}\frac{z^n}{n!}$$
+
+The ordinary hypergeometric function is seen throughout about all infinite continued fractions along with not-so-ordinary hypergeometric functions. A couple interesting formulae Gauss and others noted I shall list below:
+
+$$\frac{{}_2 F_1 (a+1,b;c+1;z)}{c*{}_2 F_1 (a+1,b;c+1;z)} = \frac{1}{1+\frac{\frac{(a-c)b}{c(c+1)}z}{1+\frac{\frac{(b-c-1)(a+1)}{(c+1)(c+2)}z}{1+\frac{\frac{(a-c-1)(b+1)}{(c+2)(c+3)}z}{1+\frac{\frac{(b-c-2)(a+2)}{(c+3)(c+4)}z}{1+\cdots}}}}}$$
+
+$${}_2 F_1 (1,b;c;z) = \frac{c-1}{c-1-zb+ \underset{k=1}{\overset{\infty}{ \mathrm K}} \frac{k(b+k-1)z(1-z)}{c+k-1-z(b+2k)}}, |arg(1-z)|=\pi$$
+
+The branched continued fractions can help approximate multivariable hypergeometric functions; however I will get more into special functions such as the hypergeometric function in later sections. The important thing about branched continued fractions in this section is their notation.
+
+$$ d_0(z) + \underset{k=1}{\overset{\infty}{ \mathrm D}} \underset{i_k=1}{\overset{N}{ \sum}} \frac{c_{i(k)} (z)}{d_{i(k)} (z)} = d_0(z)  +\underset{i_1=1}{\overset{N}{ \sum}} \frac{c_{i(1)} (z)}{d_{i(1)} (z) + \underset{i_2=1}{\overset{N}{ \sum}} \frac{c_{i(2)} (z)}{d_{i(2)} (z) + \underset{i_3=1}{\overset{N}{ \sum}} \frac{c_{i(3)} (z)}{d_{i(3)} (z) + \cdots}}} $$
+
+You can replace the sum notation with any notation like product notation or even Gauss Kettenbruch K notation. Thus there are a few of the main types of continued fraction notation stated in this section; all of which shall be used in later sections.
+
+\section{Bessel Functions with Continued Fractions}
+
+Bessel functions have been used and alluded to throughout this paper. Bessel functions (specifically modified Bessel functions) are seen in many equalities to basic infinite continued fractions. But why one might ask? This section will attempt to explain what Bessel functions are, why Bessel functions are seen in infinite continued fractions, and how to use them. 
+$${} $$
+
+It is rarely stated how continued fractions and Bessel functions relate on websites such as Wikipedia. Therefore, this concept is not researched much into versus relations with hypergeometric functions. Let us define the modified Bessel functions.
+
+$$I_a(x) = i^{-a} J_a(ix) = \underset{m=0}{\overset{\infty}{\sum}} \frac{1}{m!\Gamma(m+a+1)}(\frac{x}{2})^{2m+a}$$
+
+And
+
+$$I_n(x)=e^\frac{-i n \pi}{2} J_n(ix)$$
+
+Also $$K_a(x) = \frac{\pi}{2} \frac{I_{-a}(x)-I_{a}(x)}{sin(a\pi)}$$
+
+Where
+
+$$J_a(x) = \frac{(\frac{x}{2})^{a}}{\Gamma(a+1)} {}_0 F_1(a+1;-\frac{x^2}{4})$$
+
+Perhaps it may be obvious now where the Bessel function’s relation to infinite continued functions is derived from. It can be defined with a hypergeometric function and some algebra. There is a ton of documented and proven connections between hypergeometric functions and infinite continued fractions, thus that is the probable reason for the Bessel functions’ connections to infinite continued fractions. Although, Bessel functions were used and are used to solve/show for the canonical solutions to the following form of differential equation.
+
+$$x^2 \frac{d^2y}{dx^2} + x\frac{dy}{dx} + (x^2-a^2)y = 0$$
+
+Where $a$ is an arbitrary complex number. Bessel functions are seen everywhere and may be considered a special function. Here are some of its interesting properties involving infinite continued fractions (shown previously):
+
+$$J_n(x)=\frac{\frac{1}{\Gamma(n+1)}*\frac{x}{2}^{2n}}{1+\frac{x^2}{B(0)+ \underset{q=1}{\overset{\infty}{ \mathrm K}} \frac{A(q)}{B(q)}}}$$
+
+Where
+
+$$ A(a) = 4a^2 + 4na - x^2$$
+
+$$ B(b) = 4b^2 + 8b + 4nb + 4 + 4n - x^2$$
+
+$x$ and $n$ are integers
+
+$$\frac{I_1(a)}{I_0(a)} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{2n}{a}} $$
+
+Although much enigma remains of Bessel functions and their connections to infinite continued fractions, a connection between continued fractions and Bessel functions can be made from Euler’s continued fraction formula:
+
+$$ \underset{n=1}{ \overset{\infty}{\sum}} (\underset{r=1}{ \overset{n}{\prod}} a_r) = \frac{a_0}{1+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{-a_n}{1+a_n}}$$
+
+I must give credit to WolframAlpha, Wikipedia, and \url{https://math.stackexchange.com/questions/4153391/explanation-of-continued-fraction-for-bessel-functions} for pretty much everything so far related to Bessel functions. The link shown has a complete summary on how the formula below was defined:
+
+$$J_n(x)=\frac{\frac{1}{\Gamma(n+1)}*\frac{x}{2}^{2n}}{1+\frac{x^2}{B(0)+ \underset{q=1}{\overset{\infty}{ \mathrm K}} \frac{A(q)}{B(q)}}}$$
+
+Where
+
+$$ A(a) = 4a^2 + 4na - x^2$$
+
+$$ B(b) = 4b^2 + 8b + 4nb + 4 + 4n - x^2$$
+
+$x$ and $n$ are integers
+
+${}$
+
+The solution involves the summation form of the Bessel J function and said Euler continued fraction formula. Thus, perhaps it is truly clear now how infinite continued fractions and Bessel functions interact via their formulae involving the hypergeometric function and simplification into an infinite continued fraction via Euler’s continued fraction formula.
+
+\section {Error Functions with Continued Fractions}
+
+Error functions were only briefly mentioned in this paper. However, they are seen in many important infinite continued fractions. For instance:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{1} = \frac{(\frac{2}{e\pi})^{0.5}}{\comperrorfunc(\frac{1}{2^{0.5}})}-1$$
+
+Where $\comperrorfunc$(x) is the complementary error function and:
+
+$$\comperrorfunc(x) =1- \errorfunc(x)$$
+
+Where:
+
+$$\errorfunc(z)=\frac{2}{\pi^{0.5}}\int_{0}^z e^{-t^2} dt$$
+
+Although it is not truly clear if the error function is more connected to continued fractions than some other functions, the formula stated in the beginning of this section proves its usage. Through the formula you can derive a continued fraction form of $\comperrorfunc(1/(2^{0.5}))$:
+
+$$\comperrorfunc(\frac{1}{2^{0.5}}) = \frac{(\frac{2}{e\pi})^{0.5}}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{n}{1}}$$
+
+There are plenty of continued fraction forms of the error function (involving $e$ and $\pi$). Thus, probably the main reason why error functions can be seen in some important continued fractions is either unknown or related to limits seen in formulas involving $e$ and $\pi$, perhaps including their infinite continued fractions. However, there a plenty of continued fraction formulas with error functions equal to them on WolframAlpha when searched, even mentioning Mill’s Ratio.
+
+\section {Hypergeometric Function with Continued Fractions}
+
+The big concept of this section: hypergeometric functions can define tons of infinite continued fractions based on many algorithms, formulas, variables, and important values. Whenever infinite continued fractions are mentioned, hypergeometric functions are considered the main equivalences to them; not Bessel or error functions. So, how does it truly, deeply, work? As stated earlier the Gaussian hypergeometric function goes as the following:
+
+$$ {}_2 F_1 (a,b;c;z) = \underset{n=0}{\overset{\infty}{\sum}} \frac{(a)_n (b)_n}{(c)_n}\frac{z^n}{n!} = \underset{n=0}{\overset{\infty}{\sum}} \frac{(\underset{k=1}{\overset{n}{\prod}} (a-k+1)) (\underset{k=1}{\overset{n}{\prod}} (b-k+1))}{\underset{k=1}{\overset{n}{\prod}} (c-k+1)}\frac{z^n}{n!} $$
+
+The hypergeometric function is a special function seen throughout all of mathematics (especially continued fractions). However, this is just the Gaussian hypergeometric function. The generalized hypergeometric function can be defined as the following:
+
+$${}_p F_q (a_1,\cdots, a_p;b_1,\cdots,b_q;x) = \underset{k=0}{\overset{\infty}{\sum}} \frac{\underset{n=1}{\overset{p}{\prod}} (\underset{m=1}{\overset{k}{\prod}}(a_n-k+1))}{\underset{n=1}{\overset{q}{\prod}} (\underset{m=1}{\overset{k}{\prod}}(b_n-k+1))} \frac{x^k}{k!}$$
+
+Using Pochammer symbol notation, we get:
+
+$${}_p F_q (a_1,\cdots, a_p;b_1,\cdots,b_q;x) = \underset{k=0}{\overset{\infty}{\sum}} \frac{\underset{n=1}{\overset{p}{\prod}} (a_n)_k}{\underset{n=1}{\overset{q}{\prod}} (b_n)_k} \frac{x^k}{k!}$$
+
+Where
+
+$$(c)_x = \underset{m=1}{\overset{x}{\prod}}(c-x+1) $$
+
+The generalized hypergeometric function is seen throughout all infinite continued fractions via various formulae mentioned previously from Gauss, Euler, and other mathematicians. The question however is why such a large and strange function is seen within the realm of infinite continued fractions. The awaited moment has arrived; the reasoning is stated below. This shall be a modification of the proof of Gauss’s continued fraction simplified to simple terms. Note that a thorough proof is on this website: \url{https://en.m.wikipedia.org/wiki/Gauss%27s_continued_fraction}
+
+$${}$$
+
+Proof:
+
+$${}$$
+
+Given a sequence of functions $f_n$ where:
+
+$$f_{n-1} - f_n = k_n z f_{n+1}$$
+
+Where n is a natural number and $k_n$ is a constant, we can derive by adding $f_n$ to both sides of the equality and then dividing both sides by $f_n$:
+
+$$\frac{f_{n-1}}{f_n} = 1 + k_n z \frac{f_{n+1}}{f_n}$$
+
+Which implies
+
+$$\frac{f_n}{f_{n-1}} = \frac{1}{k_n z \frac{f_{n+1}}{f_n}}$$
+
+By setting $n=1$ in the equation we get:
+
+$$\frac{f_1}{f_{0}} = \frac{1}{1+k_1 z \frac{f_{2}}{f_1}}$$
+
+By substituting the formula described above for $\frac{f_2}{f_1}$ and substituting continuously, we get:
+
+$$\frac{f_1}{f_{0}} = \frac{1}{1+k_1 z \frac{1}{1+k_2 z \frac{f_{3}}{f_2}}} = \frac{1}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{k_n z}{1}}$$
+
+We can replace $\frac{f_n}{f_{n-1}}$ with $g_n$ to get:
+
+$$g_1= \frac{1}{1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{k_n z}{1}} $$
+
+A simple Gauss hypergeometric function can be defined as the following:
+
+$${}_0 F_1 (a;z) = 1+\frac{1}{1!a}z+\frac{1}{2!a(a+1)}z^2+ \frac{1}{3!a(a+1)(a+2)}z^3 + \cdots$$
+
+Now we can check if it follows the formula stated in the beginning of our proof:
+
+$${}_0 F_1 (a-1;z) - {}_0 F_1 (a;z) = k_a z {}_0 F_1 (a+1;z) $$
+
+Through some algebra of the series, we can find:
+
+$${}_0 F_1 (a-1;z) - {}_0 F_1 (a;z) = \frac{z}{a(a-1)} {}_0 F_1 (a+1;z) $$
+
+Which would make:
+
+$$f_i={}_0 F_1 (a+i;z), k_i = \frac{1}{(a+i)(a+i-1)}$$
+
+Thus giving:
+
+$$\frac{{}_0 F_1 (a+1;z)}{{}_0 F_1 (a;z)}=\frac{1}{1+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{\frac{1}{(a+n)(a+n-1)} z}{1}}$$
+
+Through some modification, this can also produce:
+
+$$\frac{{}_0 F_1 (a+1;z)}{a{}_0 F_1 (a;z)}=\frac{1}{a+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{z}{a+n}}$$
+
+The hypergeometric functions ${}_1 F_1$ and ${}_2 F_1$ are also can be turned into continued fractions via similar methods to the one above. These three hypergeometric series are Gauss hypergeometric series and they are the types of hypergeometric functions that can easily be turned into infinite continued fractions. I shall list one more CF below:
+
+$$\frac{{}_1 F_1 (a+1;b+1;z)}{{}_1 F_1 (a;b;z)}=\frac{1}{1+ \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{\frac{a+\frac{n}{2}mod(n+1,2)-(b+ceil(\frac{n}{2})-1)mod(n,2)}{(b+n-1)(b+n)}z}{1}}$$
+
+More infinite continued fractions based on hypergeomtric functions can be found on Wolfram Alpha by inputting “hypergeometric function continued fraction identities.” Thus, I will conclude this section on hypergeometric functions by describing their ineffable properties and abilities with continued fractions. It is with the formulae seen throughout this paper that much of the new continued fraction formulae is derived from. The properties of the hypergeometric functions are unbelievable, and continued fractions are not even their primary purpose in most cases. It seems clear however, the truth that hypergeometric function truly are the functions that can define continued fractions (usually ${}_0F_1$, ${}_1 F_1$, and ${}_2 F_1$). Hypergeometric functions with continued fractions deserve many papers alone however traveling throughout all realms of continued fractions would be impossible. I would suggest any reader to browse the continued fractions on Wolfram Alpha and see the multitude of hypergeometric identities for varieties of hypergeometric functions. All the realms of mathematics are connected, and it is special functions like the hypergeometric function that weld them together.
+
+${}$
+
+This next section will focus on the abilities we can use to compute various continued fractions accurately, efficiently, and generalizability. The importance of top-down versus down-up computation for continued fractions shall be described in this section.
+
+\section{Continued Fraction Computational Algorithms}
+
+There are many algorithms to approximate continued fractions; however they have flaws. I shall start with a basic and useful algorithm below:
+
+$$\underset{n=x}{\overset{y}{ \mathrm K}} \frac{f_1(n)}{f_2(n)} = f(x,y,f_1,f_2)$$
+
+Where $f(x,y,f_1,f_2)$ returns the CF via the following condensed Lua code:
+
+$$local \, function \, f(x,y,f_1,f_2)$$
+$$local \, CF = 0$$
+$$for \, i = x, y, 1 \, do$$
+$$CF = f_1(x+y-i)/(f_2(x+y-i)+CF)$$
+$$end$$
+$$return \, CF$$
+$$end$$
+
+This code describes the very definition of CFs. However, in some scenarios this algorithm may not be the best option to compute CFs. For it goes from the bottom of the CF up, thus an infinite upper bound would not be computable without changing the upper bound to a finite value. However, there exist some algorithms that compute parts of CFs instead of the CF itself. For instance, some algorithms may even compute a specific partial denominator of a sequence of partial denominators. However, we will not focus on those algorithms in this section. A way we can continuously and accurately approximate an infinite continued fraction using the algorithm above can be done with a while loop.
+
+$$local \, UpperBoundApproximator = 0$$
+$$while \, wait(1) \, do$$
+$$print(f(x,x+UpperBoundApproximator, f_1, f_2))$$
+$$UpperBoundApproximator += 1$$
+$$end$$
+
+The code above approximates an infinite continued fraction; approximating better with each iteration of the while loop. Of course, adding a short wait in function $f$ would be practical in application of this code to avoid crashes. Given an infinite amount of time, the outputs should approach the exact value of the infinite continued fraction. Hypothetically, removing all waits would compute the approximations almost instantaneously (in reality it would crash the script executor). However, an algorithm that computes literally top-down could be much more useful in specific scenarios of infinite continued fractions. However, an algorithm similar to that would be difficult to program. A problem when facing the development of such an algorithm is dividing nth partial numerator by the next part of the continued fraction; for affecting the bottom of a nested continued fraction iteratively is tricky if not impossible. There is one fundamental algorithm for a regular continued fraction; the Hurwitz continued fraction expansion algorithm:
+
+$${}$$
+
+Given:
+
+$$z=round(z)+\underset{n=1}{\overset{N}{ \mathrm K}} \frac{1}{b_n} , b_n \in \mathbb{Z}$$
+
+and
+
+$$\tau(q)=\frac{1}{q}-round(\frac{1}{q})$$
+
+Where $\mathbb{Z}$ denotes the set of integers and $round$ rounds to the nearest Gaussian integer ($a+bi, a,b \in \mathbb{Z}$). We get given $b_0=round(z)$
+
+$$b_j=round(\frac{1}{\tau^j(z)})$$
+
+This algorithm is great, and there are many more like it for specific types of CFs. The following hyperlink will direct the reader to a list of continued fraction algorithms:
+
+$${}$$
+
+\url{http://www.wolframalpha.com/input/?i=continued%20fraction%20algorithms}
+
+$${}$$
+
+As stated earlier, there are many various algorithms for various CF scenarios. Thus, this concludes this short section.
+
+\section{Continued Fractions from Continued Fractions}
+
+Many various continued fractions can be derived from other continued fraction identities. A simple example goes as follows:
+
+$$\phi=1+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{1} = \phi^2 - 1$$
+
+Which implies:
+
+$$\phi^2=2+\underset{n=1}{\overset{\infty}{\mathrm K}}\frac{1}{1}$$
+
+This example is not exactly exemplary; for it does not modify the partial numerators or partial denominators. Much more advanced and useful continued fractions can be derived from more fundamental identities. For instance, the basic yet fundamental formula:
+
+$$\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{k} = \frac{2}{(k^2+4)^{0.5}+k}$$
+
+Can be used to derive:
+
+$$\frac{2}{3^{0.5}+i}=\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{i}$$
+
+We can also do the following:
+$${}$$
+Let:
+
+$$f(x)=\frac{2}{(x^2+4)^{0.5}+x}$$
+
+If we set a constant such as the imaginary constant $i$ equal to $f(x)$, we can attempt to derive a CF for $i$. We can derive:
+
+$$-2i=(x^2+4)^{0.5}+x$$
+
+And the value $-2i$ satisfies $x$, thus implying:
+
+$$i=\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{-2i}$$
+
+This is only the beginning of what is possible with various CF identities. There are plenty of invaluable formulae to use, derived from functions mentioned earlier such as hypergeometric functions and Bessel functions. However, let’s return to the formula we just used and see if there are any flaws with it. Given:
+
+$$\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{k} = y = \frac{2}{(k^2+4)^{0.5}+k}$$
+
+It is implied:
+
+$$\frac{2}{y}=(k^2+4)^{0.5}+k$$
+$$\frac{2}{y}-k=(k^2+4)^{0.5}$$
+$$(\frac{2}{y}-k)^2=k^2+4$$
+$$\frac{4}{y^2}-\frac{4k}{y}+k^2=k^2+4$$
+$$\frac{4}{y^2}-\frac{4k}{y}=4$$
+$$\frac{1}{y^2}-\frac{k}{y}=1$$
+$$1-ky=y^2$$
+$$y(k+y)=1$$
+$$k+y=\frac{1}{y}$$
+$$k=\frac{1}{y}-y$$
+
+This was true in the case that $y=i$ and the continued fraction with $-2i$ in the partial denominator does converge to $i$. However this reverse method is not true for most equalities to continued fractions. For instance let:
+
+$$\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{k}=\pi$$
+
+This would imply:
+
+$$k=\frac{1}{\pi}-\pi$$
+
+However, as the upper bound of the continued fraction where the partial denominators are $k$ approaches infinity, the continued fraction converges to an alternative value instead of $\pi$.
+
+$$\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{\frac{1}{\pi}-\pi}=-\frac{1}{\pi}$$
+
+This is the value the continued fraction actually converges to. Interestingly, this value is the opposite of $\pi$ (a line with slope $\pi$ would be perpendicular to $y=-\frac{x}{\pi}$). It turns out that actually:
+
+$$-(\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{\frac{1}{k}-k})^{-1}=k$$
+
+Which implies:
+
+$$\underset{n=0}{\overset{\infty}{\mathrm K}} \frac{1}{\frac{1}{k}-k}=\frac{1}{-k}$$
+
+This works in the case where the continued fraction equals $i$ because:
+
+$$\frac{1}{-i}=i$$
+
+This formula is true for all tested inputs unlike the previous formula. Going any further into these CF paradoxes would lead to a feedback loop alternating between various CFs, so I shall branch off onto another method to derive CFs from CFs. A formula not mentioned in the Bessel function section is shown below:
+
+$$S(p/q)=\frac{I_{1+p/q}(2/q)}{I_{p/q}(2/q)}=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{p+nq}$$
+
+This formula is shown on this Wikipedia article: \url{https://en.m.wikipedia.org/wiki/Continued_fraction}
+$${}$$
+This is not necessarily finding continued fractions from continued fractions but this formula can be used to find many simple continued fractions. This is perhaps the most generalized modified Bessel function formula to a simple CF. In conclusion, this section showed how continued fraction identities could make alternative continued fractions or continued fraction identities.
+
+\section{Further Generalization of Continued Fractions}
+
+Continued fractions can be generalized much beyond what we consider a generalized continued fraction (shown below).
+
+$$b_{x-1} + \frac{a_x}{b_x + \frac{a_{x+1}}{b_{x+1} + \frac{a_{x+2}}{... b_{y-1} + \frac{a_y}{b_y}}}}$$
+
+For instance, branched continued fractions shown previously can equate to numerous types of continued fractions including the one above.
+
+$$ d_0(z) + \underset{k=1}{\overset{\infty}{ \mathrm D}} \underset{i_k=1}{\overset{N}{ \sum}} \frac{c_{i(k)} (z)}{d_{i(k)} (z)} = d_0(z)  +\underset{i_1=1}{\overset{N}{ \sum}} \frac{c_{i(1)} (z)}{d_{i(1)} (z) + \underset{i_2=1}{\overset{N}{ \sum}} \frac{c_{i(2)} (z)}{d_{i(2)} (z) + \underset{i_3=1}{\overset{N}{ \sum}} \frac{c_{i(3)} (z)}{d_{i(3)} (z) + \cdots}}} $$
+
+This notation is great, however it can be generalized and improved upon even further:
+
+$$d_{r_{x-1}}(z) + \underset{k=x}{\overset{y}{ \mathrm D}} \underset{i_k=r_k}{\overset{N_k}{ \sum}} \frac{c_{i_k} (z)}{d_{i_k} (z)} = d_{r_{x-1}}(z)+ \underset{i_x=r_x}{\overset{N_x}{ \sum}} \frac{c_{i_x}(z)}{d_{i_x}+ \underset{k=x+1}{\overset{y}{ \mathrm D}} \underset{i_k=r_k}{\overset{N_k}{ \sum}} \frac{c_{i_k} (z)}{d_{i_k} (z)}}$$
+
+But why stop here? Branched continued fractions are only one type of multidimensional continued fractions. There are even many variations and definitions of branched continued fractions in the realm of mathematics. These multidimensional CFs can be obtained by adding more variables or subscripts or more sophisticated methods. But, plenty of CFs one can illustrate can be described by the formula above. Perhaps extending the notation even further, the addition of partial denominators can be changed to any binary operation; however by then the definition of a continued fraction begins to fade, thus we can try using various binary operations in a future section. Generalizing a CF further than the branched CF formula shown above can be a difficult task. Therefore, we can try generalizing parts of the continued fraction. For example, you can add CFs in the partial numerators of a CF. But as stated previously, the core concepts of a CF begin to fade when one generalizes it too much. Perhaps instead of generalizing the continued fraction definition, we can try to ungeneralize it as far as possible. The first notable ungeneralization of a continued fraction is a simple CF where the partial numerators are 1 and the partial denominators are a sequence of integers as shown below.
+
+$$b_{0} + \frac{1}{b_1 + \frac{1}{b_{2} + \frac{1}{... b_{y-1} + \frac{1}{b_y}}}}$$
+
+Where $b_n$ is an integer. We could restrict $b$ even further to the set of natural numbers. However, further restriction of the CF would ungeneralize the CF too much and its definition would unravel. Probably every reader can visualize how the generalized form of a CF is superior to the ungeneralized form above. We could try to generalize CFs further by including stuff like what a CF to the nth power or derivative with respect to some input is equivalent to. However, for a generalized CF, deriving such a formula for all n is perhaps impossible and frankly not too valuable. Consider this:
+$${}$$
+We write mathematical equations and expressions on a 2D plane (such as paper), how could we generalize writing to a 3D space? Furthermore, could we translate a CF to a 3D space or an $N$D space? Such an idea however is pretty much irrelevant to the topic of continued fractions because 3D math concepts are not extremely different from 2D math. Therefore, our extremely generalized branched CF notation satisfies most if not all CFs. We could try modifying CFs to generalize them further, but I will save that for the next section. For now, I will end this section with some interesting branched and weird CFs:
+
+$$1+\frac{2+\frac{3+\cdots}{4+\cdots}}{3+\frac{4+\cdots}{5+\cdots}}$$
+
+Perhaps we can write the CF above with our generalized CF formula. However, it appears that this “CF” is one of the few types of what some may consider to be a continued fraction that cannot easily be translated to our branched CF formula. Thus, how can we “generalize” our formula further to allow the formula above? Note that we are only descending through the denominators in our formula, thus we could try affecting both the numerator and denominator equally, but how? Let’s create the following function:
+
+$$SBCF(x)=x+\frac{x+1+\frac{x+2+\cdots}{x+3+\cdots}}{x+2+\frac{x+3+\cdots}{x+4+\cdots}}$$
+
+Thus implying the weird CF nest is $SBCF(1)$.One way to get a CF function equivalent to $SBCF(x)$ is by infinitely nesting CFs in the partial numerator arguments of their predecessors as shown below.
+
+$$SBCF(x)=x+\underset{n_1=1}{\overset{\infty}{ \mathrm K}} \frac{x*(2n-1)+\underset{n_2=n_1}{\overset{\infty}{ \mathrm K}} \frac{x*2n_2+\cdots}{x*(2n_2+1)+\cdots}}{x*2n_1}$$
+
+However it may not be obvious that the nested CF notation above is equivalent to SBCF(x). The function $SBCF(x)$ can be defined as the following fractional function nest:
+
+$$SBCF(x)=\underset{n->\infty}{lim}f(x,n)$$
+
+Where
+
+$$f(x,y)=x+\frac{f(x+1,y-1)}{f(x+2,y-1)}$$
+
+and
+
+$$f(x,1)=x+\frac{x+1}{x+2}$$
+
+and of course
+
+$$f(x,q)=0,q<1$$
+
+Thus, we have formulas for $SBCF(x)$. Now, I will list more interesting CFs.
+
+$$1+\frac{3+\frac{5+\frac{7+\cdots}{6}}{4}}{2}$$
+
+This is like a flipped CF, expanding upwards in the partial numerators. Let’s try to convert this to a CF.
+
+Let:
+
+$$UBCF(x)=x+\frac{3x+\frac{5x+\cdots}{4x}}{2x}$$
+
+After some research, I saw and realized we can just write the CF above as the infinite series shown below:
+
+$$UBCF(x)=x+\underset{n=1}{\overset{\infty}{\sum}}\frac{x+2n}{\underset{m=1}{\overset{n}{\prod}}(x+2m-1)}$$
+
+A form of $UBCF(x)$ using Gauss Continued Fraction notation would be CFs infinitely nested in their predecessors’ partial numerator argument but all with upper bounds of one, thus, nothing special. Let’s do some more interesting CFs. How can we denote this CF:
+
+$$\frac{a_1}{b_1+\frac{a_2}{b_2+b_3+\frac{a_3}{b_4+b_5+b_6+\frac{a_4}{\ddots}}}}$$
+
+The CF is quite easy to write in Gauss continued fraction notation (shown below):
+
+$$\frac{a_1}{b_1+\frac{a_2}{b_2+b_3+\frac{a_3}{b_4+b_5+b_6+\frac{a_4}{\ddots}}}}=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{\underset{s=1}{\overset{n}{\sum}} b_{(\underset{q=1}{\overset{n}{\sum}}(\underset{r=q}{\overset{n}{\sum}} 1))+1-s} }$$
+
+This next CF will be much more difficult to define in a CF notation:
+
+$${}$$
+
+Let:
+
+$$\text{DBCF}(x)=\frac{x}{\frac{x+1}{\frac{x+2}{\ddots}+\frac{x+3}{\ddots}}+\frac{x+2}{\frac{x+3}{\ddots}+\frac{x+4}{\ddots}}}$$
+
+Through some guessing and analysis, I discovered the solution to DBCF$(x)$ is similar to the solution for $SBCF(x)$ as shown below:
+
+$$\text{DBCF}(x)=\underset{n_1=1}{\overset{\infty}{\mathrm K}} \frac{x+2n_1-2}{\underset{n_2=n_1}{\overset{\infty}{\mathrm K}} \frac{x+2n_2-1}{\underset{n_3=n_2}{\overset{\infty}{\mathrm K}} \frac{x+2n_3}{\ddots}}}$$
+
+As you can probably see, function DBCF is like function $SBCF$ but instead of nesting CFs in the partial numerator arguments, DBCF nests CFs in the partial denominator arguments. Now, for one final continued fraction:
+
+$$\frac{1}{1+\frac{1}{\frac{1}{1+\frac{1}{1}}+\frac{1}{\frac{1}{1+\frac{1}{1+\frac{1}{1}}}+\frac{1}{\ddots}}}}$$
+
+The CF above is equivalent to:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{\underset{q=1}{\overset{n}{\mathrm K}} \frac{1}{1}}$$
+
+Through some algebraic logic, we can find:
+
+$$\underset{q=1}{\overset{n}{\mathrm K}} \frac{1}{1}=\frac{Fib(n)}{Fib(n+1)}$$
+
+Thus implying we receive our mysterious:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{\frac{Fib(n)}{Fib(n+1)}}$$
+
+I will delve much more into this CF above in a future section. Thus, we have ended this section with the knowledge of excellent tree continued fractions and generalizations of continued fractions.
+
+\section{The Extravaganza of Modifying Continued Fractions}
+
+In this section, we will truly turn the realm of continued fractions into a sandbox of intellectual delights. We will try various functions and operations on continued fraction functions and see either intriguing or disappointing results. First, I will attempt to take the derivative of this standard CF as shown below.
+
+$$\frac{d}{dx} \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x}$$
+
+Acknowledging that the continued fraction is equivalent to the following formula, we get:
+
+$$\frac{d}{dx} \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x}=\frac{d}{dx} \frac{2}{(x^2+4)^{0.5}+x}$$
+
+Through some calculations, we get:
+
+$$\frac{d}{dx} \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x}=-2(\frac{\frac{x(x^2+4)^{0.5}}{x^2+4}+1}{((x^2+4)^{0.5}+x)^2})$$
+
+By graphing this function, we get a smooth function with a range of $-1<y<0$ and a domain of all real numbers. There is nothing that special with this so I shall try another thing. What if instead of adding the partial denominators to the next partial numerators in the denominator, we multiplied them? Let:
+
+$$\text{K}_{MULT}(a_n,b_n,n=x,y)=\frac{a_x}{b_x*\frac{a_{x+1}}{b_{x+1}*\frac{a_{x+2}}{\ddots b_{y-1}*\frac{a_y}{b_y}}}}$$
+
+By multiplying the $b$’s with the fractions and setting the upper bound to $\infty$, we get:
+
+$$\text{K}_{MULT}(a_n,b_n,n=x,\infty)=\frac{a_x}{\frac{b_xa_{x+1}}{\frac{b_{x+1}a_{x+2}}{\ddots}}}$$
+
+Through further simplification of the fractions, we get:
+
+$$\text{K}_{MULT}(a_n,b_n,n=x,\infty)=\frac{a_x*b_{x+1}*a_{x+2}*b_{x+3}*a_{x+4}*\cdots}{a_{x+1}*b_{x}*a_{x+3}*b_{x+2}*\cdots}=\frac{\underset{n=1}{\overset{\infty}{\prod}} a_{x+2n-2}b_{x+2n-1}}{\underset{n=1}{\overset{\infty}{\prod}} a_{x+2n-1}b_{x+2n-2}}$$
+
+And with an upper bound of simply $y$, we get:
+
+$$\text{K}_{MULT}(a_n,b_n,n=x,y)=\frac{a_x}{\frac{b_xa_{x+1}}{\frac{b_{x+1}a_{x+2}}{\frac{\ddots}{b_y}}}}=a_x*b_y^{(-1)^{y-x+1}}*\frac{1}{\frac{b_xa_{x+1}}{\frac{b_{x+1}a_{x+2}}{\frac{\ddots}{b_{y-1}a_y}}}}$$
+
+Simplifying this further into something like product notation will involve some algebraic logic of reciprocality. Acknowledge:
+
+$$\frac{a}{b}=a*b^{-1}$$
+
+And
+
+$$\frac{a}{\frac{b}{c}}=a*b^{-1}*c^{(-1)^2}=a*b^{-1}*c$$
+
+Thus implying from some logic:
+
+$$\frac{a_1}{\frac{a_2}{\frac{a_3}{\frac{\ddots}{a_y}}}}=a_1*a_2^{-1}*a_3*\cdots*a_y^{(-1)^{y+1}}$$
+
+We can enhance this solution to the following formula:
+
+$$\frac{a_1}{\frac{a_2}{\frac{a_3}{\frac{\ddots}{a_y}}}}=\underset{n=1}{\overset{y}{\prod}} (a_n)^{(-1)^{n-1}}$$
+
+We can generalize this formula above further to match our problem.
+
+$$\frac{b_xa_{x+1}}{\frac{b_{x+1}a_{x+2}}{\frac{\cdots}{b_{y-1}a_y}}}=\underset{n=x}{\overset{y-1}{\prod}}(b_n*a_{n+1})^{(-1)^{n-x}}$$
+
+Thus we get:
+
+$$\text{K}_{MULT}(a_n,b_n,n=x,y)=\frac{a_x}{b_y^{(-1)^{y-x}}*\underset{n=x}{\overset{y-1}{\prod}}(b_n*a_{n+1})^{(-1)^{n-x}}}$$
+
+For our next modification to CFs, I thought it would be interesting to convert the definition of ContinuedFractionK notation to a generalized operational series form. Let:
+
+$$\underset{n=1}{\overset{\infty}{ALL}} [a_{1,n},a_{2,n},a_{3,n},\cdots,a_{y,n}], [*_1,*_2,*_3,\cdots,*_y] = (a_{1,1}*_1(a_{1,2}*_2(a_{1,3}*_3(\cdots a_{1,y} *_y(a_{2,1}*_1(a_{2,2}*_2(\cdots)))\cdots))))$$
+
+Where $*_x$ denotes a binary operation, the first subscript of $a$ identifies which number sequence (a sequence because the second subscript defines what number is chosen) is being operated on. We can find that:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{a_n}{b_n}=\underset{n=1}{\overset{\infty}{ALL}} [a_n,b_n], [/,+]$$
+
+We do not need 2 subscripts because we have a finite sequence of number sequences and the characters $a$ or $b$ define what number sequence is being operated on. Likewise, the operators do not need subscripts because they are in order so we can go left to right and back again to infinity (because the upper bound is infinity). It is probably important to note that the number of operators must be equal to the number of number sequences in our $ALL$ notation. Perhaps it would be better to denote it with a nonstandard matrix (with a size of the number of sequences by 2) as shown below:
+
+$$\underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_{1,n} & a_{2,n} & a_{3,n}\cdots \\
+*_1 & *_2 & *_3\cdots
+\end{bmatrix}$$
+
+Thus we get:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{a_n}{b_n}=\underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & +
+\end{bmatrix}$$
+
+I think the $ALL$ notation above is pretty cool because it can be used to represent many types of infinite series such as sigma notation or product notation. This generalization (which I probably should have put in the previous section) can show some fundamental properties of various series of operators and operands. Although, this notation cannot emulate expressions like complicated branched continued fractions that well. However, we can also derive a formula for our multiplication continued fractions shown below:
+
+$$\text{K}_{MULT}(a_n,b_n,n=x,y)=\underset{n=x}{\overset{y}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & *
+\end{bmatrix}$$
+
+Where $*$ this time represents multiplication. Although this $ALL$ notation is quite an interesting and fundamental tool, it is time to continue on the journey of modifying continued fractions. We may have taken the derivative of a CF, but what is it when it is integrated? Recall:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x}=\frac{2}{(x^2+4)^{0.5}+x}$$
+
+This implies:
+
+$$\int \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x} dx=\int \frac{2}{(x^2+4)^{0.5}+x} dx$$
+
+Furthermore, we have to find a function where its derivative equals our continued fraction function. Wolfram Alpha gives the solution of:
+
+$$\int \frac{2}{(x^2+4)^{0.5}+x} dx = \text{ln}((x^2+4)^{0.5}+x)-\frac{2}{((x^2+4)^{0.5}+x)^2}+c$$
+
+This can probably be found via some integration formulas like $\int \frac{1}{x} dx = \text{ln}(x)$. Integrating and taking the derivative of a CF is interesting, but finding its inverse is also intriguing. Given:
+
+$$f(x)=\frac{2}{(x^2+4)^{0.5}+x}$$
+
+We can solve for $f^{-1}(x)$ by swapping $x$ and $y$ and solving for $y$ given $y=f(x)$. Therefore, the graph of $f^{-1}(x)$ is equivalent to the graph of:
+
+$$x=\frac{2}{(y^2+4)^{0.5}+y}$$
+
+Which is equivalent to:
+
+$$\frac{2}{x}=(y^2+4)^{0.5}+y$$
+
+By singling out the sqrt, squaring both sides, and solving for $y$ through more algebraic methods, we get:
+
+$$y=\frac{1}{x}-x=f^{-1}(x)$$
+
+However the domain of $f^{-1}(x)$ is $x>0$ because the range of f(x) is $y>0$. I find it interesting how the inverse of an infinite continued fraction is simply $\frac{1}{x}-x$. We looked at our $ALL$ notation for a short time and we could try to solve/simplify or find properties of continued-fraction-like equations like the one shown below:
+
+$$\underset{n=x}{\overset{y}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & \string^
+\end{bmatrix} = \frac{a_1}{b_1^{\frac{a_2}{b_2^{\cdots}}}}$$
+
+However, continued fractions such as these can be difficult to simplify due to multiple factors such as the alternating powers from the nesting of fractional exponents. But there are plenty of other binary operations we can use with the division operation in the form of:
+
+$$\underset{n=x}{\overset{y}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & *_2
+\end{bmatrix}$$
+
+Perhaps setting the second operation to concatenation could yield some interesting results. Although the concatenation of integers with rationals is not well defined so perhaps we can try easier/well-defined operations. Or, perhaps we can make our own operations. Acknowledge that a binary operation between two values $a$ and $b$ is equivalent to $f(a,b)$ where function $f$ returns what the binary operation would return. Let:
+
+$$a*_{\text{FUNCTION}}b=\text{FUNCTION}(a,b)$$
+
+Therefore, given $a*_{\text{sum}}b=a+b$, we get:
+
+$$a+b=a*_{\text{sum}}b=\text{sum}(a,b)$$
+
+Therefore, we can make any binary operation that returns the output of a function with arguments of its operands. By applying this knowledge to our $ALL$ notation, we get:
+
+$$\underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & *_f
+\end{bmatrix} = a_1 / (f(b_1, a_2 / (f(b_2,a_3 / \cdots))))$$
+
+Although, perhaps the use of the symbol $*$ for both general binary operations and multiplication has probably been confusing so I will use $\star$ to denote future general binary operations (implying $*_f$ would now be represented as $\star_f$). There is a major problem with our $ALL$ notation however. Although it is true that:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{a_n}{b_n}=\underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & +
+\end{bmatrix}$$
+ 
+The following statement is false with our current definition of our $ALL$ notation but could be falsely inferred from the statement above as true:
+
+$$\underset{n=1}{\overset{x}{ \mathrm K}} \frac{a_n}{b_n}=\underset{n=1}{\overset{x}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & +
+\end{bmatrix}$$
+
+The statement above is false because with our first iteration ($x=1$), our $ALL$ notation may produce $\frac{a_1}{b_1+}$ if the definition of our $ALL$ is considered in various ways. One could think this of our $ALL$ notation because we did not define it for finite bounds. Therefore, I shall redefine our $ALL$ notation (for 2 number sequences and binary operations) for any upper bound to satisfy our finite continued fraction definition:
+
+$$\underset{n=1}{\overset{x}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+\star_1 & \star_2
+\end{bmatrix} = a_1 \star_1 (b_1 \star_2 (a_2 \star_1 (b_2 \star_2 (\cdots a_x \star_1 (b_x)))))$$
+
+With this new definition, it is now clearly true that:
+
+$$\underset{n=1}{\overset{x}{ \mathrm K}} \frac{a_n}{b_n}=\underset{n=1}{\overset{x}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & +
+\end{bmatrix}$$
+
+Because this part of this section is getting pretty long, I will focus on a couple other types of modifications of continued fractions. For this next modification, I want a function $p(x,y)$ where:
+
+$$p(\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{x},y)=\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{xy}$$
+
+Where of course:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{xy}=\frac{2}{((xy)^2+4)^{0.5}+xy}$$
+
+Therefore implying:
+
+$$p(\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{x},y)=\frac{2}{((xy)^2+4)^{0.5}+xy}$$
+
+Because we learned that the inverse of $\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{x}$ is $\frac{1}{x}-x$, we get for function $p$:
+
+$$p(x,y)=\frac{2}{(((\frac{1}{x}-x)y)^2+4)^{0.5}+(\frac{1}{x}-x)y}$$
+
+However, this may only be true for positive inputs for $x$. Because $\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1}=\frac{\phi-1}{2}$, we should get:
+
+$$p(\frac{\phi-1}{2},y)=\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{y}$$
+
+The statement above appears to be true for all positive inputs of $y$ (excluding 0). One may try more than just multiplication between the inputs of $p$ in the partial denominator argument of the CF in $p$ (which I recommend doing) but unfortunately, the partial denominator argument stays constant in these scenarios so complicated CFs with inconsistent partial denominators cannot be simplified this way. Now, for another modification of CFs, I will multiply all partial numerators and denominators of a standard CF by $i$ to see any interesting results. One may wonder what the following is equivalent to:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{i}{i}$$
+
+To simplify this expression above, we have to start with the equation below:
+
+$$x=\frac{i}{i+x}$$
+
+This equation above implies:
+
+$$x=\frac{i}{i
++\frac{i}{i+\frac{i}{i+\cdots}}}$$
+
+Which of course is equivalent to our CF we are attempting to simplify. We can multiply both sides of our previous equation by $i+x$ to get:
+
+$$x(i+x)=i$$
+
+Through some simplification, we get:
+
+$$x^2+ix-i=0$$
+
+Now we can use the quadratic formula to get:
+
+$$x=\frac{-i \pm (-1+4i)^{0.5}}{2}$$
+
+Where:
+
+$$\frac{-i + (-1+4i)^{0.5}}{2} \approx 0.6248 + 0.3002i$$
+
+And
+
+$$\frac{-i + (-1+4i)^{0.5}}{2} \approx -0.6248 - 1.3002i$$
+
+When approximating the CF itself, we get:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{i}{i} \approx 0.6248 + 0.3002i$$
+
+Therefore implying the following (true) statement:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{i}{i} = \frac{-i + (-1+4i)^{0.5}}{2}$$
+
+Just by multiplying the partial numerator and denominator arguments of $\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{1}$ (which yields the golden ratio minus 1) by $i$, we get the interesting complex value of about 0.6248+0.3002$i$. However, perhaps an even more challenging and a more interesting CF to simplify would be:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{i}{ni}$$
+
+If the partial numerator argument was 1, we could easily write this using our Bessel function formulae. Unfortunately, the CF above has $i$ for its partial numerator argument so we cannot do such an easy simplification. Perhaps we can simplify the CF so the partial numerator argument is 1 and simplify from there. If the partial numerators were all 1, we would get:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ni}=\frac{I_{1+p/q}(2/q)}{I_{p/q}(2/q)}=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{p+nq}, p=0,q=i$$
+
+Which implies:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ni}=\frac{I_{1+0/i}(2/i)}{I_{0/i}(2/i)}=\frac{I_{1}(-2i)}{I_{0}(-2i)}$$
+
+Of course, our partial numerator argument to the CF we are attempting to simplify is $i$, not 1. Therefore, more complicated methods must be used to simplify our CF. Wolfram Alpha gives an interesting continued fraction expansion when approximating the CF using the Hurwitz expansion algorithm:
+
+$$\underset{n=1}{\overset{1}{ \mathrm K}} \frac{i}{ni}=1$$
+
+$$\underset{n=1}{\overset{2}{ \mathrm K}} \frac{i}{ni}=[1;-1-2i]$$
+
+$$\underset{n=1}{\overset{3}{ \mathrm K}} \frac{i}{ni}=[1;-1-2i,-3]$$
+
+$$\underset{n=1}{\overset{4}{ \mathrm K}} \frac{i}{ni}=[1;-1-2i,-3,-4i]$$
+
+$$\underset{n=1}{\overset{10}{ \mathrm K}} \frac{i}{ni}=[1;-1-2i,-3,-4i,-5,-6i,-7,-8i,-9,-10i]$$
+
+Perhaps the pattern is obvious now, giving:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{i}{ni}=1+\frac{1}{-1-2i+\underset{n=3}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{-n+n(-1)^n-ni-ni(-1)^n}{2}}}$$
+
+Although the CF has partial numerators of all 1 now, simplifying it may be still as difficult as it was previously. We also did not derive this formula algebraically (even though both the new CF and the original CF approach the same value of about $0.7738+0.3449i$). Algebraically speaking, both CFs are the same value when their upper bounds approach infinity or are equal to any natural numbers greater than 2 (as seen in the CF expansions). This implies:
+
+$$\underset{n=1}{\overset{x}{ \mathrm K}} \frac{i}{ni}=1+\frac{1}{-1-2i+\underset{n=3}{\overset{x}{ \mathrm K}} \frac{1}{\frac{-n+n(-1)^n-ni-ni(-1)^n}{2}}}, x>2$$
+
+We can get various equalities to:
+
+$$\underset{n=3}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{-n+n(-1)^n-ni-ni(-1)^n}{2}}$$
+
+Such as:
+
+$$\underset{n=3}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{-n+n(-1)^n-ni-ni(-1)^n}{2}} = \underset{n=3}{\overset{\infty}{ \mathrm K}} \frac{1}{n(-i)^{mod(n,2)+1}} $$
+
+Which equals:
+
+$$\underset{n=3}{\overset{\infty}{ \mathrm K}} \frac{1}{n(-i)^{\frac{-(-1)^n+3}{2}}}$$
+
+Because $(-i)^2=i^2=-1$. Therefore:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{i}{ni}=1+\frac{1}{-1-2i+\underset{n=3}{\overset{\infty}{ \mathrm K}} \frac{1}{n(-i)^{\frac{-(-1)^n+3}{2}}}}$$
+
+Some may consider this a simplification of our CF but I want an expression without infinite CFs. There are few things that we can do from here. We know that the partial denominators of the new and original CF are all Gaussian integers. Unfortunately, searching for hypergeometric function formulae to satisfy the continued fractions above is difficult and it may not even exist. Therefore, I will end this futile attempt for “simplification” here. As one final modification, I will use a type of nesting “second order” division instead of regular division. Let:
+
+$$x/^2y = \underbrace{x/x/x/x/ \cdots x}_\text{y}$$
+
+Acknowledge:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{a_n}{b_n} = \underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/ & +
+\end{bmatrix} = a_1 / (b_1 + a_2 / ( b_2 + a_3 / ( \cdots )))$$
+
+I know that I previously stated I would not replace any more binary operations of CFs, but let’s replace $/$ with $/^2$. Therefore, we get the equation via replacing $/$ with $/^2$:
+
+$$\underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/^2 & +
+\end{bmatrix} = a_1 /^2 (b_1 + (a_2 /^2 (b_2 + (a_3 /^2 ( \cdots )))))$$
+
+However, because $/^2$ is only defined for natural number inputs of $y$ in $x/^2y$, the statement above is likely undefined for most if not all $a$ and $b$. Nicely:
+ 
+$$x /^2 y = x^{1-y}$$
+
+So instead we shall use the definition above for $/^2$ instead of our repeated division definition.
+
+$$\underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+a_n & b_n \\
+/^2 & +
+\end{bmatrix} = a_1^{1-(b_1+a_2^{1-(b_2+\cdots)})}$$
+
+This formula now outputs a value for most inputs of $a$ and $b$. However, many values for inputs may cause the function to diverge or approach positive or negative infinity. If $a_k$ is negative, the function will have a probable complex solution. We can get some interesting properties of the equation above such as:
+
+$$\underset{x->\infty}{lim} \underset{n=1}{\overset{\infty}{ALL}} \begin{bmatrix}
+x & x \\
+/^2 & +
+\end{bmatrix} = 0$$
+
+Thus, we shall begin a new section on how infinite CFs can represent many interesting and important functions.
+
+\section{Interesting Continued Fraction Equalities to Functions}
+
+In this section, we will find and attempt to discover continued fractions equalities to various functions. Let’s try to equate perhaps the most simplest function, $f(x)=x$, with an infinite continued fraction to represent $x$. Therefore, what infinite continued fraction yields $x$? In other words, what functions $f$ and $g$ satisfy:
+
+$$x=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{f(n,x)}{g(n,x)}$$
+
+Hypothetically:
+
+$$x=\frac{1}{\frac{1}{x}+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{0}{1}}$$
+
+Which is equivalent to saying:
+
+$$x=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{\frac{|n-2|-(n-2)}{2}}{\frac{1}{x}}$$
+
+Therefore, we can substitute any single-argument function for $x$ to receive an infinite continued fraction equivalent for the function. However, some may not consider the continued fraction above to be infinite because we simply use an infinite CF equivalent to zero to make the CF zero. Therefore, an infinite CF that approaches $x$ as its upper bound approaches infinity may be more reasonable. Interestingly, I encountered:
+
+$$x=\phi \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x^{(-1)^{n}}}$$
+
+This formula above actually approaches $x$ with each iteration of the CF, where $\phi=\frac{1+5^{0.5}}{2}$, or in other words, the golden ratio. $\phi$ of course also is equivalent to the famous infinite continued fraction with only 1’s for its partial numerators and denominators. Deriving the identity for $x$ above is a little difficult, but can be explained. Acknowledge:
+
+$$\frac{1}{\frac{1}{x}+\frac{1}{x}}=\frac{1}{\frac{2}{x}}=\frac{x}{2}$$
+
+And
+
+$$\frac{1}{\frac{1}{x}+\frac{1}{x+\frac{1}{\frac{1}{x}}}}=\frac{1}{\frac{1}{x}+\frac{1}{2x}}=\frac{1}{\frac{1}{x}(1+\frac{1}{2})}=\frac{2x}{3}$$
+
+And
+
+$$\frac{1}{\frac{1}{x}+\frac{1}{x+\frac{1}{\frac{1}{x}+\frac{1}{x}}}}=\frac{1}{\frac{1}{x}+\frac{1}{x+\frac{x}{2}}}=\frac{1}{\frac{1}{x}+\frac{1}{\frac{3x}{2}}}=\frac{1}{\frac{1}{x}+\frac{2}{3x}}=\frac{3x}{5}$$
+
+Perhaps the pattern is obvious now.
+
+$$\underset{n=1}{\overset{k}{\mathrm K}} \frac{1}{x^{(-1)^{n}}}=\frac{Fib(k+1)x}{Fib(k+2)}$$
+
+Where the CF above can represent the iterations of the previous CFs. Acknowledging $\underset{n->\infty}{lim} \frac{Fib(n)}{Fib(n+1)} = \frac{1}{\phi}$, we can get:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x^{(-1)^{n}}}=\frac{x}{\phi}$$
+
+Thus implying:
+
+$$\phi \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{x^{(-1)^{n}}}=x$$
+
+Which is actually equivalent to:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{\phi ^ {\frac{|n-2|-(n-2)}{2}}}{x^{(-1)^{n}}} = x$$
+
+This proof and derivation of the formula above is still a little unclear and inaccurate. The use of absolute values, an invaluable type of piecewise function, is also a necessary evil upon this great formula. However, the formula above does truly converge to $x$ and no finite amount of iteration will ever equate to the variable $x$. Therefore, the formula above I do consider a solution to an infinite CF that equals a variable $x$. Therefore, you can substitute any function for $x$ and the output will also be the function. However, for future infinite CFs of functions in this section, I will attempt to find CFs that do not explicitly use the function I am intending to equate in them. An example of this would be:
+
+$$\text{tanh}(x)=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{\frac{2n-1}{x}}$$
+
+Where function tanh and equalities to it cannot be seen in the partial numerator or denominator arguments of its infinite CF definition. So how was this formula above for the hyperbolic tangent derived? On WolframAlpha, it states the following is Lambert’s Continued Fraction Identity:
+
+$$\text{tanh}(1)=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{2n-1}$$
+
+This of course is just the substitution of 1 for $x$ for $\text{tanh}(x)$. Now perhaps we have a better question: how did Lambert derive the formula above? When searching on the internet for Lambert’s Continued Fraction Identity, we find that it is derived from Gauss’s identity in 1812 for the function tanh:
+
+$$\text{tanh}(x)=\frac{x}{1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{x^2}{n+1}}$$
+
+Again, we encounter another question: how did Gauss derive this formula for $\text{tanh}(x)$? I was unable to find much information online, so perhaps we can derive it ourselves using the CF formulas we already know. Acknowledge:
+
+$$\tanh(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$$
+
+Perhaps we can modify the formula above to equate to a hypergeometric function that we then can use to find a continued fraction for tanh. Let’s review the following formula:
+
+$$e^x=\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n}{n!}$$
+
+With this we get:
+
+$$\tanh(x)=\frac{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n}{n!} - \underset{n=0}{\overset{\infty}{\sum}} \frac{(-x)^n}{n!}}{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n}{n!} + \underset{n=0}{\overset{\infty}{\sum}} \frac{(-x)^n}{n!}}$$
+
+Which we can simplify to:
+
+$$\tanh(x)=\frac{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n-(-x)^{n}}{n!}}{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n+(-x)^{n}}{n!}}$$
+
+This can give:
+
+$$\tanh(x)=\frac{\sinh(x)}{\cosh(x)}$$
+
+However, we are attempting to find a hypergeometric function formula for the function tanh. Recall:
+
+$${}_p F_q (a_1,\cdots, a_p;b_1,\cdots,b_q;x) = \underset{k=0}{\overset{\infty}{\sum}} \frac{\underset{n=1}{\overset{p}{\prod}} (\underset{m=1}{\overset{k}{\prod}}(a_n-k+1))}{\underset{n=1}{\overset{q}{\prod}} (\underset{m=1}{\overset{k}{\prod}}(b_n-k+1))} \frac{x^k}{k!}$$
+
+We want to modify tanh into the form above (specifically for $_0F_1$, $_1F_1$, or $ _2F_1$). We can also try to make the function tanh equivalent fraction of two hypergeometric functions. We can convert the factorials of $n$ to products:
+
+
+$$\tanh(x)=\frac{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n-(-x)^{n}}{\underset{k=1}{\overset{n}{\prod}}k}}{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n+(-x)^{n}}{\underset{k=1}{\overset{n}{\prod}}k}}$$
+
+We can get even more (probably unnecessary) products by acknowledging that:
+
+$$(\underset{n=1}{\overset{q}{\prod}} x) = x^q$$
+
+Where $q$ is a natural number. Then indices for $n$ in the infinite sums happen to be natural numbers. So we get:
+
+$$\tanh(x)=\frac{\underset{n=0}{\overset{\infty}{\sum}} \frac{(\underset{q=1}{\overset{n}{\prod}} x)-(\underset{q=1}{\overset{n}{\prod}} -x)} {\underset{k=1}{\overset{n}{\prod}}k}}{\underset{n=0}{\overset{\infty}{\sum}} \frac{(\underset{q=1}{\overset{n}{\prod}} x)+(\underset{q=1}{\overset{n}{\prod}} -x)}{\underset{k=1}{\overset{n}{\prod}}k}}$$
+
+However, instead of this, I will factor out an $x^n$ because we want an $x^n$ on the outside for our hypergeometric function. By doing this, we can get:
+
+$$\tanh(x)=\frac{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n (1-\frac{(-x)^{n}}{x^n})}{n!}}{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n (1+\frac{(-x)^{n}}{x^n})}{n!}}$$
+
+Where $(-x)^n / x^n = (-1)^n$ where $n$ is a natural number. Therefore, we get:
+
+$$\tanh(x)=\frac{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n (1-(-1)^n)}{n!}}{\underset{n=0}{\overset{\infty}{\sum}} \frac{x^n (1+(-1)^n)}{n!}}$$
+
+We are close to matching a hypergeometric function definition. However, transforming $1-(-1)^n$ and $1+(-1)^n$ to a fraction of two or more products in the form of the generalized hypergeometric formula shown previously is quite difficult, if not impossible. We know:
+
+$$1-(-1)^n=1-\underset{k=1}{\overset{n}{\prod}}(-1), n \in \mathbb{N}$$
+
+Where $\mathbb{N}$ denotes the set of natural numbers. However, we need to subtract $n$ in the products. Unfortunately, we are unable to do that without some major changes. Therefore, we have reached a dead end from our choices. People like Gauss would spend many days on just these hypergeometric functions. Therefore, I will leave it to the reader to figure out how Gauss derived the continued fraction for $\tanh(x)$. I may have not been able to figure out how a continued fraction for tanh was derived, but I can list many amazingly simple infinite continued fractions for various functions:
+
+$$\sin(x)=\frac{x}{1+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{\frac{x^2}{2n(1+2n)}}{1-\frac{x^2}{2n(1+2n)}}}$$
+
+$$e^x=1+\frac{x}{1+\underset{k=1}{\overset{\infty}{\mathrm K}} \frac{f(x,k)}{1}}, f(z,k)=\frac{\frac{-z}{2k-2}-\frac{(-1)^kz}{2k-2}+\frac{z}{2k}-\frac{(-1)^kz}{2k}}{2}$$
+
+And like I stated previously, we can substitute any function for $x$ in our CF for $x$:
+
+$$f(x)=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{\phi ^ {\frac{|n-2|-(n-2)}{2}}}{(f(x))^{(-1)^{n}}}$$
+
+Thus giving:
+
+$$1/x=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{\phi ^ {\frac{|n-2|-(n-2)}{2}}}{(1/x)^{(-1)^{n}}}= \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{\phi ^ {\frac{|n-2|-(n-2)}{2}}}{(x)^{(-1)^{n+1}}}$$
+
+Overall, we can get many functions with infinite continued fractions. However, the ones above have a domain of $\mathbb{C}$. Many simple continued fractions may only represent specific functions across specific domains. For instance:
+
+$$\frac{1}{1+x}=1-\frac{x}{1+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{1-x}},x \in \mathbb{C},|x|<1$$
+
+The amazing thing about these identities is that through substitution, simplification, and modification, we can find more continued fractions for functions.
+
+\section{Functions to Apply Transformations on Arguments of Infinite Continued Fractions}
+
+
+One may consider what algebraic functions could do the following:
+
+$$f_1(\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n+c}$$
+
+$$f_2(\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{cb_n}$$
+
+$$f_3(\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{c+a_n}{b_n}$$
+
+$$f_4(\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{ca_n}{b_n}$$
+
+Discovering these algebraic functions could make simplifying these CFs much easier and perhaps show some interesting properties of these CFs. Although, we may discover that no algebraic functions may satisfy some of the equalities above. I shall attempt to solve for the function $f_1$ first (and ascend in numerical order from there). Acknowledge:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n+c}= \frac{a_1}{b_1+c + \frac{a_2}{b_2+c + \frac{a_3}{\ddots}}}$$
+
+To find $f_1(x)$, I want an algebraic equation to represent it (without infinite continued fractions in it). If we could use infinite continued fractions in the equality for the function $f_1$, we could get:
+
+$$f_1(x)=\frac{x \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n+c}}{\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}}$$
+
+Although we cannot simplify a general infinite CF with partial numerators and denominators of $a_n$ and $b_n$, we have not tried simplifying two similar CFs being divided. So, I will attempt to simplify the expression below so we can find a simple solution for $f_1(x)$:
+
+$$\frac{ \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n+c}}{\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}}$$
+
+Because both CFs have the same partial numerators, the first partial numerator ($a_1$) can be any value and the CFs will still be the same value when divided (unless $a_1=0$). In fact, we can get a new expression:
+
+$$(\frac{1}{b_1+c+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n+c}})(b_1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})$$
+
+I find it quite interesting that if $c=0$, the expression will always equal 1 (because of our fractional definition of it). This gives us the irrelevant but interesting equality:
+
+$$(\frac{b_1}{b_1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}}) +(\frac{1}{b_1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}})(\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})=1$$
+
+However, when distributing the CF with $c$ as a variable, we get:
+
+With this, we get a new equality to $f_1(x)$:
+
+$$f_1(x)=(\frac{xb_1}{b_1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}}) +(\frac{x(\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})}{b_1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n}})$$
+
+It appears that when attempting to simplify the fraction of two infinite continued fractions, we got another one. Unfortunately, through further analysis I find no way to simplify the function $f_1$. Perhaps simplifying $f_2$ could be easier because multiplication and division are much more similar than addition and division. Recall:
+
+$$f_2(\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{b_n})=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{cb_n}$$
+
+Therefore it could imply:
+
+$$f_2(x)=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a_n}{cb_n}$$
+
+Wait, if the functions are simply equivalent to CFs, then how can they be simplified? Because $a_n$ and $b_n$ are simply numbers of number sequences, there are no proper definitions of the functions. The input $x$ does not define $a_n$ and $b_n$ because there are multiple CFs for the same values and modifying the partial denominators or numerators in the same way for such CFs can yield different results. Therefore, the functions $f_1$, $f_2$, $f_3$, and $f_4$ can not be defined. So, what could this mean about the transformations of infinite CFs? This means transforming CFs in the same way that are the same value but are in different forms may yield different results. For instance:
+
+$$-1=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{-1}{2}=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{-(2n-1)2n}{4n+1}$$
+
+However
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{-1}{2(2)} \neq \underset{n=1}{\overset{\infty}{\mathrm K}} \frac{-(2n-1)2n}{2(4n+1)}$$
+
+Therefore, transformations of the arguments of CFs must be either more specifically defined or they may be undefinable for all CFs. However, dividing CFs by CFs can still yield some interesting results like we saw in our strange function $f_1$.
+
+\section{Properties of Functions Involving Inputs in Infinite Continued Fraction Arguments}
+
+By the title of this section, I imply the properties of functions of the following structure:
+
+$$C(x)=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{N(x)}{D(x)}$$
+
+Where $N$ and $D$ are single-argument functions. Perhaps a simple CF function involving inconstant functions $N$ and $D$ would be:
+
+$$f(x)=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{x}$$
+
+When $x$ is negative, the output is uncertain because there are infinitely many asymptotes on the left side of the graph as the upper bound increases without bound. For instance:
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{-1}{-1}$$
+
+Diverges between 0 and 1 and can be undefined at some upper bounds. Perhaps we can get a better expression for our CF though. Acknowledge that $y$ is equivalent to $\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{x}$ in the equation below:
+
+$$y=\frac{x}{x+y}$$
+
+Which implies
+
+$$xy+y^2=x$$
+
+Through graphing the equations above, we can see my previous assumption of the asymptotes was wrong. The asymptotes are actually bounded between -4 and 0. However, there are still infinitely many of them when the upper bound of the CF approaches infinity. We can try to solve for $y$ further.
+
+$$y^2=x-xy$$
+
+$$y^2=x(1-y)$$
+
+$$\frac{y^2}{-y+1}=x$$
+
+$$-y-1-\frac{1}{y-1}=x$$
+
+From here, I used WolframAlpha to simplify it and I got:
+
+$$y=\frac{-x \pm \sqrt{x^2+4x}}{2}$$
+
+This looks much like the quadratic formula, but using functions of $x$ instead $a,b,c$. We can find that $a=1,b=x,c=-x$, thus giving what could have been used to solve for $y$:
+
+$$y^2+xy-x=0$$
+
+However, the CF is only equal to $y$ for:
+
+$$y=\frac{-x + \sqrt{x^2+4x}}{2}$$
+
+Therefore:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{x}=\frac{-x + \sqrt{x^2+4x}}{2}$$
+
+As you can see, we have obtained a lot of information about CFs from a single one. There are plenty of other basic CFs similar to the one above. What if we tried a two-argument function? Given:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a}{b} = y$$
+
+How can we solve for $y$? Similar to our first problem, we get:
+
+$$y=\frac{a}{b + y}$$
+
+This implies
+
+$$yb+y^2=a$$
+
+Or in other words
+
+$$y^2+yb-a=0$$
+
+Thus giving
+
+$$y=\frac{-b \pm \sqrt{b^2+4a}}{2}$$
+
+And
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a}{b} = \frac{-b + \sqrt{b^2+4a}}{2}$$
+
+This much more general equality above shows how we can solve CFs with more than one variable in their partial numerator and denominator arguments. Perhaps we can simplify something more complex. Let:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{a+c} = y$$
+
+We can simply substitute $a+c$ in the partial denominator argument of our previous CF ($b$) to get:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{(a+c)} =  \frac{-(a+c) + \sqrt{(a+c)^2+4}}{2}$$
+
+Overall, if the CF we are attempting to simplify does not use its index in its partial numerator and denominator arguments and its upper bound is infinity, we can use:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{a}{b} = \frac{-b + \sqrt{b^2+4a}}{2}$$
+
+That does beg the question, how can we simplify an infinite CF with variables and the usage of the index in the partial numerator and or denominator arguments? I shall attempt to simplify the expression:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{n}$$
+
+I shall let $l(x)$ denote it; however, it cannot be simplified in the manner shown earlier. Recall:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{n}=\frac{I_1(2)}{I_0(2)}$$
+
+Perhaps trying various inputs of the partial numerator argument will reveal a pattern. I will now attempt to simplify (or approximate):
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{2}{n}$$
+
+The CF does converge to approximately 1.126. WolframAlpha generated the simple CF expansion for it:
+
+$$[1;7,1,10,\cdots]$$
+
+Interestingly, we can multiply all of the 2s out of the CF to get:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{2}{n} = \frac{1}{1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{2}{n}}+\frac{1}{1+\underset{n=2}{\overset{\infty}{\mathrm K}} \frac{2}{n}}$$
+
+and
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{2}{n} = \frac{1}{1+\frac{1}{2+\underset{n=3}{\overset{\infty}{\mathrm K}} \frac{2}{n}}+\frac{1}{2+\underset{n=3}{\overset{\infty}{\mathrm K}} \frac{2}{n}}} + \frac{1}{1+\frac{1}{2+\underset{n=3}{\overset{\infty}{\mathrm K}} \frac{2}{n}}+\frac{1}{2+\underset{n=3}{\overset{\infty}{\mathrm K}} \frac{2}{n}}}$$
+
+And so on. This may be able to be translated into a branched continued fraction. However, that does not help us simplify it to an expression without infinite continued fractions. When graphing:
+
+$$y=\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{n}$$
+
+You can see that there actually are infinitely many asymptotes extending across the entire negative portion of the $x$-axis as the upper bound approaches infinity. However, the asymptotes are spread apart quite far. After checking the hypergeometric function identities relating to continued fractions on WolframAlpha, I found on the list:
+
+$$\frac{\frac{_0 F _1 (;b;z)}{\Gamma(b)}}{\frac{_0 F _1 (;b+1;z)}{\Gamma(b+1)}} = b+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{z}{b+n}, b \leq 0$$
+
+Or
+
+$$\frac{_0 \tilde {F} _1 (;b;z)}{_0 \tilde {F} _1 (;b+1;z)} = b+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{z}{b+n}, b \leq 0$$
+
+Implying:
+
+$$\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{x}{n} = \frac{_0 \tilde {F} _1 (;0;x)}{_0 \tilde {F} _1 (;1;x)}$$
+
+However, $\Gamma(0)$ is undefined and I did not mention how the equality does not work for integer inputs for $b$. Therefore, the solution above is invalid because 0 is considered an integer in most contexts including this one. I was unable to find other formulas that could equate to the CF. Therefore, I find solving infinite continued fractions with indices in their arguments to be quite difficult to simplify; that is until we find more formulae.
+
+\section{Applications of Infinite Continued Fractions Outside of Number Theory}
+
+We know that infinite continued fractions and finite (simple) continued fractions can be useful tools in areas of mathematics like number theory. The convergents of finite continued fractions (the simplified rationals A/B of finite continued fractions) can approximate values pretty well. However, I have not mentioned the use of continued fractions much in areas like geometry, physics, or even chemistry. Perhaps geometry is the easiest place to find relations with continued fractions and an area of math other than number theory or algebra. We know:
+
+$$1+\underset{n=1}{\overset{\infty}{\mathrm K}} \frac{1}{1} = \phi$$
+
+The golden ratio ($\phi$) is perhaps the most interesting constant in geometry (except for maybe $\pi$). The diagonal lengths of a regular pentagon is its side length multiplied by the golden ratio. That is simply one of the many locations of the golden ratio in geometry. Many more interesting geometry facts on the golden ratio can be found on the link below:
+
+$${}$$
+\url{https://en.wikipedia.org/wiki/Golden_ratio}
+$${}$$
+
+However, there are more continued fractions than simply the continued fraction for the golden ratio. There are also numerous other constants in geometry that can be written as continued fractions such as the Pythagorean constant ($\sqrt{2}$) or $\pi$ of course. Here are two CFs for them:
+
+$$ \pi = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{(2n-1)^2}{6} $$
+
+$$\sqrt{2}=1+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{2}$$
+
+As you can see, these irrational constants that are often seen in geometry have rather simple continued fractions for their complexity. These CFs can approximate these constants quite accurately with their convergents. Perhaps even more astounding, there are numerous simple CFs for each of these constants, many of which can be found on WolframAlpha. But of course, the simplest and most beautiful constant is the golden ratio.
+
+\section{The Mysterious $\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } $}
+
+I would consider the continued fraction in the title of this section quite dumbfounding to me. I may even consider it the final boss of simplifying continued fractions to expressions without infinite continued fractions. It of course, can be simplified to an expression without nesting a CF in itself, shown below:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \frac{Fib(n)}{Fib(n+1)} }$$
+
+$$\because \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} = \frac{Fib(n)}{Fib(n+1)}$$
+
+We can approximate the infinite continued fraction on WolframAlpha with an upper bound of 10000 to get:
+
+$$\underset{n=1}{\overset{10000}{ \mathrm K}} \frac{1}{ \frac{Fib(n)}{Fib(n+1)} } \approx 0.5466101460317810228852$$
+
+We get a simple continued fraction approximation of:
+
+$$[0;1,1,4,1,6,2,1,764,1,1,1,8,1,2,2,1,1,8,\cdots]$$
+
+There does not appear to be any pattern which implies we must use more concrete methods of simplification. Instead of being dependent on the Fibonacci sequence, let:
+
+$$Fib(x)=\frac{\phi^x-(\frac{1}{\phi})^x \cos(\pi x)}{\sqrt{5}}$$
+
+Which is true for all inputs of $x$. Now we can substitute this in our CF to get:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \frac{Fib(n)}{Fib(n+1)} } = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \frac{\frac{\phi^n-(\frac{1}{\phi})^n \cos(\pi n)}{\sqrt{5}}}{\frac{\phi^{n+1}-(\frac{1}{\phi})^{n+1} \cos(\pi (n+1))}{\sqrt{5}}} }$$
+
+Which we can simplify to:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{\phi^n-(\frac{1}{\phi})^n \cos(\pi n)}{\phi^{n+1}-(\frac{1}{\phi})^{n+1} \cos(\pi (n+1))}}$$
+
+I will denote the CF above with the symbol $\xi$, a symbol not yet used within this document. Unfortunately, it appears simplifying $\xi$ beyond its current form may not be possible. Given there is a function $f$ to represent the the following:
+
+$$f(x)=\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{g(x,n)}$$
+
+Where the function $f$ does not have an infinite continued fraction in its alternative equality and $g$ is an arbitrary function, we could obviously get a simplification for $\xi$. I can find no evidence to show that $\xi$ can be simplified to an expression without infinite continued fractions in it. It is quite unlikely, if not impossible to simplify the general CF:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{a_n}$$
+
+Where $a_x$ can be a real number. Of course, even if there is no simplification to the general CF above, the nested CF we are attempting to simplify is not the CF above. Therefore, it may be simplifiable. Our current equation for $Fib(x)$ has a cosine in it, making it highly unlikely to be able to find a hypergeometric function formula to represent the CF. Because the inputs for the cosine are multiples of $\pi$, we get:
+
+$$cos(\pi x)=(-1)^x, x \in \mathbb{N}$$
+
+Therefore:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{\phi^n-(\frac{1}{\phi})^n \cos(\pi n)}{\phi^{n+1}-(\frac{1}{\phi})^{n+1} \cos(\pi (n+1))}}=\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{\phi^n-(\frac{1}{\phi})^n (-1)^n}{\phi^{n+1}-(\frac{1}{\phi})^{n+1} (-1)^{n+1}}}$$
+
+We can simplify this even further to:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{\phi^n-(-\frac{1}{\phi})^n}{\phi^{n+1}-(-\frac{1}{\phi})^{n+1}}}$$
+
+Where $-\frac{1}{\phi}$ is the conjugate of the golden ratio (which I will denote with $\psi$). Therefore, we get the new expression:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{\phi^n-(\psi)^n}{\phi^{n+1}-(\psi)^{n+1}}}$$
+
+If we want the fraction to have only $\phi$ on the inside of the parentheses, we get:
+
+$$\underset{n=1}{\overset{ \infty }{ \mathrm K }} \frac{1}{\frac{\phi^n-(\phi)^{-n} (-1)^n}{\phi^{n+1}-(\phi)^{-n-1} (-1)^{n+1}}}$$
+
+Now that we have our various simplified equalities of our original nested CF, we need to attempt to find something like a hypergeometric function that can represent the CF. However, while searching the hypergeometric formulas on WolframAlpha, I noticed none are equivalent to CFs that have a constant other than -1 raised to the power of the CFs index. In our CF, we raise the golden ratio and its conjugate to a function of the CF’s index. Therefore, we either need to simplify our CF even further, or search for more unique and proper solutions to our problem. We can also substitute $(\frac{1+\sqrt{5}}{2})$ for $\phi$ just to simply get:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } = \underset{ n=1 }{\overset{ \infty }{ \mathrm K }} \frac{ 1 }{\frac{(\frac{1+\sqrt{5}}{2})^{n} - (\frac{1+\sqrt{5}}{2})^{-n} (-1)^n}{(\frac{1+\sqrt{5}}{2})^{n+1} - (\frac{1+\sqrt{5}}{2})^{-n-1} (-1)^{n+1}}} = \underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{(\frac{1+\sqrt{5}}{2})^n-(-(\frac{2}{1+\sqrt{5}}))^n}{(\frac{1+\sqrt{5}}{2})^{n+1}-(-(\frac{2}{1+\sqrt{5}}))^{n+1}}}$$
+
+Unfortunately, when given expression:
+
+$$x^y - (-\frac{1}{x})^y$$
+
+We can rarely simplify it beyond its current form. Perhaps if we can reverse how the people got the continued fraction for $\tan(nx)$ on the link below, we can figure out how to simplify our CF.
+
+$${}$$
+
+\url{https://math.stackexchange.com/questions/432771/continued-fraction-for-tannx}
+
+$${}$$
+
+However, as stated previously, hypergeometric function formulas do not usually go in the form in the partial denominator argument of our current CF. Perhaps simplifying an easier CF with an exponential in its partial denominator argument would be easier and show a clearer path in simplifying our nested CF. We shall try to simplify:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{2^n}$$
+
+We can approximate the simpler CF above to about $0.4459$. It appears to converge through its approximations and convergence tests. WolframAlpha states it does not have a closed form (it cannot be simplified beyond its current CF form) because the partial denominator terms of $2^n$ grow in a complex and fast pattern. However, WolframAlpha also admits that we may just not know the formulas required to simplify such exponential CFs. This does not mean we cannot try (a rather futile attempt) to simplify the CF with $2^n$ for its partial denominator. As in the definition of our notation:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{2^n}=\frac{1}{2+\underset{n=2}{\overset{\infty}{ \mathrm K}} \frac{1}{2^n}}=\frac{1}{2+\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{2^{n+1}}}$$
+
+By graphing the following equations:
+
+$$y=\underset{n=1}{\overset{8}{ \mathrm K}} \frac{1}{x^n}$$
+
+$$y=\underset{n=1}{\overset{9}{ \mathrm K}} \frac{1}{x^n}$$
+
+I can see that if $x<1$, the two graphs no longer appear to converge at the same y-values at the same x-values. However, because $2>1$, our exponential CF most likely converges. However, because of our domain restriction of $x$ being greater than or equal to 1, it may be unlikely to find a valid solution. This is because most CFs I have encountered that are equivalent to an expression without an infinite continued fraction usually do not have any major domain restrictions for variables in the partial denominator argument. The reason for the domain restriction is probably because the CF does not pass the standard convergence tests if $x$ is less than or equal to 1 (of course when $x=1$, we get $1 / \phi$ for the CF). However, through further analysis of the graphs, it appears that if $x<-1$, the graphs also appear to be almost identical. This is because if $x<-1$, it passes the CF convergence tests. Therefore, between $-1<x<1$, the CF diverges. Unfortunately, this implies that a function that could represent the CF would also have the domain restriction and be quite discontinuous. To date, I have found only a few functions that do not exist on such a specific domain. However, functions like Arcsin only exist in the domain $-1<x<1$. Using this knowledge, I found one function with such a domain as our exponential CF with a partial denominator argument of $x^n$:
+
+$$y=\text{Arcsin}(\frac{1}{x}), x \in (-\infty, -1] \bigcup [1,\infty)$$
+
+Therefore, any function that would equate to $y=\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{x^n}$ would either have to include a function like $Arcsin(1/x)$ in it or simply be defined to not equal our CF along that specific domain. The function that may represent our CF could even be a piecewise function. The linked page mentioned using Chebyshev polynomial functions to use Gauss’s Hypergeometric Function formula to make their CF. However, Gauss’s continued fraction formula does not support exponential functions ($a^{\text{index}}$) in the partial denominator argument. Nor have I seen any other hypergeometric function satisfy our requirements. Because our nested continued fraction function got simplified to a CF with a partial denominator argument with exponentials in it, I find it unlikely we can ever simplify it beyond the following:
+
+$$\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{\frac{(\frac{1+\sqrt{5}}{2})^n-(-(\frac{2}{1+\sqrt{5}}))^n}{(\frac{1+\sqrt{5}}{2})^{n+1}-(-(\frac{2}{1+\sqrt{5}}))^{n+1}}}$$
+
+Unfortunately, the Fibonacci function most likely cannot be simplified to an equation without exponentials or more complex functions in it. However, there are equalities for the $n$th Fibonacci number not involving exponentials. For example:
+
+$$Fib(n)=\underset{k=0}{\overset{\frac{n-1}{2}}{\sum}} {}_{n-k-1} C_k $$
+
+However, after substituting equalities such as the one above for the $nth$ Fibonacci number in our CF, we get nowhere because of something like summation or integration. Like exponentials, simplifying infinite CFs with something like summation or integration in their partial denominator arguments is extremely difficult. Thus, we end this section with mysteries. Can we simplify the infinite CFs shown in this section to expressions without infinite CFs? Can we prove that the CFs shown in this section can or cannot be simplified to the qualifications in the previous question? Can we simplify any infinite continued fraction? Why are the continued fractions of many functions only having 1 and -1 raised to the index in the partial denominator arguments. If we could solve the questions above, we could simplify almost any continued fraction or show why they are unsimplifiable.
+
+\section{Conclusion}
+
+Overall, this document has been an interesting exploration of just a few realms of continued fractions. We have focused much on the simplification, generalization, and execution of these fantastic continued fractions. Just from the simple definition of a continued fraction, we and many others have derived thousands of concepts and identities based on them. We have only scratched the surface of what we can do with continued fractions. I barely mentioned the power and usefulness of using hypergeometric functions to describe CFs. You may be wondering why I spent much of this on simplifying continued fractions with infinite series. Consider our $ALL$ notation. Unlike infinite series or products, infinite continued fractions use two binary operations ($/, +$) with two value inputs ($a_n,b_n$). I consider the usage of more operations and values to make infinite continued fractions more complicated than infinite series or products. Usually, computing a continued fraction takes more time than computing an infinite series (unless the infinite series has an extremely complicated input). We have focused on plenty of core areas of continued fractions, even a couple attempts to simplify CFs with indices and variables in their arguments. Overall, this journey through the number theory of continued fractions led to questions, a few failures, and many unique solutions to solving and representing various infinite continued fractions. It is simply beautiful how concepts such as continued fractions can be notated like sigma notation or product notation, and act similar too.
+
+\section{Notation and Terminology Glossary}
+
+CF: Continued Fraction
+
+$${}$$
+
+$\underset{n=x}{\overset{y}{ \mathrm K}}$: Gauss Kettenbruch K Notation (ContinuedFractionK)
+
+$${}$$
+
+$\phi$: The Golden Ratio
+
+$${}$$
+
+$\underset{n=x}{\overset{y}{ ALL }}$: ALL binary operation series notation
+
+$${}$$
+
+$Fib(n)$: $n$th Fibonacci number
+
+$${}$$
+
+$d_{r_{x-1}}(z) + \underset{k=x}{\overset{y}{ \mathrm D}} \underset{i_k=r_k}{\overset{N_k}{ \sum}} \frac{c_{i_k} (z)}{d_{i_k} (z)}$: Branched Continued Fraction Notation
+
+$${}$$
+
+BCF: Branched Continued Fraction
+
+$${}$$
+
+$(a)_n$: Pochhammer Rising Factorial
+
+\section{Table of Important Values}
+
+\begin{center}
+\begin{tabular}{||c c c c||} 
+ \hline
+ Name & Symbol & Approximation & Actual Value \\ [0.5ex] 
+ \hline\hline
+ Golden Ratio & $\phi$ & 1.618 & $\frac{\sqrt{5}+1}{2}$ \\ 
+ \hline
+ Continued Fraction Constant & $C_1$ & 0.6978 & $\frac{I_1(2)}{I_0(2)}$ \\
+ \hline
+ The Final Boss CF & $\xi$ & 0.5466 &  $\underset{n=1}{\overset{\infty}{ \mathrm K}} \frac{1}{ \underset{k=1}{\overset{n}{ \mathrm K}} \frac{1}{1} } $\\
+ \hline
+ Third Continued Fraction Constant & $C_3$ & 1.525 &  $\frac{(\frac{2}{e\pi})^{0.5}}{\comperrorfunc(\frac{1}{2^{0.5}})}$\\
+ \hline
+ Square Root of Five & $\sqrt{5}$ & 2.236 & $5^{0.5}$ \\ [1ex] 
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+\section{Resources}
+
+\url{https://math.stackexchange.com/questions/4153391/explanation-of-continued-fraction-for-bessel-functions}
+
+$${}$$
+
+\url{https://www.wolframalpha.com}
+
+$${}$$
+
+\url{https://www.wikipedia.org}
+
+$${}$$
+
+\url{https://www.researchgate.net/publication/362912903_Approximation_for_the_Ratios_of_the_Confluent_Hypergeometric_Function_PHDN_by_the_Branched_Continued_Fractions}
+
+$${}$$
+
+\url{https://en.m.wikipedia.org/wiki/Gauss%27s_continued_fraction}
+
+$${}$$
+
+\url{http://www.wolframalpha.com/input/?i=continued%20fraction%20algorithms}
+
+$${}$$
+
+\url{https://en.m.wikipedia.org/wiki/Continued_fraction}
+
+$${}$$
+
+\url{https://math.stackexchange.com/questions/872883/upward-continued-fractions/1506472#1506472}
+
+$${}$$
+
+\url{https://math.stackexchange.com/questions/4664497/simplifying-a-complicated-continued-fraction-expression/4964829?noredirect=1#comment10630947_4964829}
+
+$${}$$
+
+\url{https://dlmf.nist.gov/15.9#E5}
+
+$${}$$
+
+\url{https://dlmf.nist.gov/15.7#E1}
+
+$${}$$
+
+\url{https://math.stackexchange.com/questions/432771/continued-fraction-for-tannx}
+
+$${}$$
+
+\url{https://en.wikipedia.org/wiki/Golden_ratio}
+
+
+\end{document}
+
